@@ -39,6 +39,7 @@ jobs:
         run: |
           coverage run -m pytest -v .
           coverage report -m
+          
       # -
       #   name: Run tests with PostgreSQL
       #   run: |
