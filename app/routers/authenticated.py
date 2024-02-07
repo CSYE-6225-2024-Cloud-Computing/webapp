@@ -65,6 +65,7 @@ async def update_user_info(request: Request, user: schemas.User = Depends(verify
     # Commit changes to the database
     db.commit()
     db.refresh(user)
+    
 
    # Return JSONResponse with headers and no content
     return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, headers=headers, content=None)
