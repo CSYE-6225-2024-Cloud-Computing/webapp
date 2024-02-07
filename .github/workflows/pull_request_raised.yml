@@ -1,9 +1,9 @@
 name: pull-request-raise-actions
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   
   pull_request:
     branches:
