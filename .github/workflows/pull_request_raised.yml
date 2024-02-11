@@ -40,9 +40,9 @@ jobs:
           coverage run -m pytest -v .
           coverage report -m
           
-      -
-        name: Run tests with PostgreSQL
-        run: exit 1
+      # -
+      #   name: Run tests with PostgreSQL
+      #   run: exit 1
           # Here you can run your tests with PostgreSQL as the backend
           # Example: coverage run -m pytest -v .
           # Example: coverage report -m
