@@ -49,6 +49,7 @@ jobs:
         run: |
           export DATABASE_URL=postgresql://postgres:${{ secrets.PG_PASSWORD }}@localhost:5432/sjdatabase
           echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+          echo ${{ secrets.PG_PASSWORD }}
 
       - name: Install Dependencies
         run: |
@@ -65,3 +66,5 @@ jobs:
           WEB_SITE_PORT: 8000
         run: |
           pytest app/tests/integration_test.py
+          coverage run -m pytest -v .
+          coverage report -m
