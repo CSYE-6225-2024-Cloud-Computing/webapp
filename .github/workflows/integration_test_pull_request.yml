@@ -3,70 +3,32 @@ name: Integration Tests
 on:
   pull_request:
     branches:
-      - main
-
-# on:
-#   push:
-#     branches:
-#       - branch-01
+      - br01
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout ️
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
+      - name: Start PostgreSQL Service
+        if: ${{ !contains(steps.status.outputs.service_status, 'running') }}
+        run: sudo service postgresql start
 
-      - name: Install PostgreSQL Client
-        run: |
-          sudo apt-get update
-          sudo apt-get install postgresql-client
-
-      # Install and initialize PostgreSQL
-      - name: Install PostgreSQL
-        run: sudo apt update && sudo apt install postgresql postgresql-contrib
-
-      - name: Initialize PostgreSQL
-        run: |
-          echo ${{ secrets.PG_PASSWORD }}
-          sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD '${{secrets.PG_PASSWORD}}'; CREATE DATABASE sjdatabase;"
-
-      - name: Enable and start PostgreSQL
-        run: sudo systemctl enable postgresql && sudo systemctl start postgresql
-
-      - name: Adjust Permissions on PostgreSQL Socket File (optional)
+      - name: Adjust Permissions on PostgreSQL Socket File
         run: sudo chmod 777 /var/run/postgresql/.s.PGSQL.5432 || true
 
-      - name: Update PostgreSQL Authentication Method (optional)
+      - name: Change PostgreSQL Password
+        run: |
+          sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '${{ secrets.PG_PASSWORD }}';"
+
+      - name: Update PostgreSQL Authentication Method
         run: |
           sudo sed -i 's/^\(host.*all.*all.*\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
-          sudo systemctl restart postgresql
 
-      - name: Configure PostgreSQL Connection
+      - name: Check PostgreSQL Version
         run: |
-          export DATABASE_URL=postgresql://postgres:${{ secrets.PG_PASSWORD }}@localhost:5432/sjdatabase
-          echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
-          echo ${{ secrets.PG_PASSWORD }}
-
-      - name: Install Dependencies
-        run: |
-          pip install -r app/requirements.txt
-          pip install pytest-cov
-          pip install psycopg2-binary
-
-      - name: Run Tests
-        env:
-          DB_USERNAME: postgres
-          DB_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          DB_DATABASE: sjdatabase
-          PORT: 5432
-          WEB_SITE_PORT: 8000
-        run: |
-          pytest app/tests/integration_test.py
-
+          postgres_version=$(psql --version | awk 'NR==1{print $3}' | awk -F "." '{print $1}')
+          echo "PostgreSQL Version: $postgres_version"
