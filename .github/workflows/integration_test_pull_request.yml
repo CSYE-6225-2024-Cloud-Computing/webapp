@@ -1,14 +1,14 @@
 name: Integration Tests
 
-on:
-  pull_request:
-    branches:
-      - main
-
 # on:
-#   push:
+#   pull_request:
 #     branches:
-#       - branch-01
+#       - main
+
+on:
+  push:
+    branches:
+      - pr03
 
 jobs:
   test:
