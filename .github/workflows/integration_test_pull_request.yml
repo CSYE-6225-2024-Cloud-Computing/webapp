@@ -33,7 +33,8 @@ jobs:
 
       - name: Initialize PostgreSQL
         run: |
-          sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD '${{ secrets.PG_PASSWORD }}'; CREATE DATABASE sjdatabase;"
+          echo ${{ secrets.PG_PASSWORD }}
+          sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD '${{secrets.PG_PASSWORD}}'; CREATE DATABASE sjdatabase;"
 
       - name: Enable and start PostgreSQL
         run: sudo systemctl enable postgresql && sudo systemctl start postgresql

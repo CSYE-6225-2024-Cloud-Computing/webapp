@@ -18,7 +18,7 @@ def get_auth_headers(username: str, password: str) -> dict:
     headers = {'Authorization': f"Basic {base64.b64encode(concatenated_value.encode('utf-8')).decode('utf-8')}"}
     return headers
 
-
+###running-pr-03###
 ########################################################CLEAR DATABASE BEFORE STARTING INTEGRATION TESTING##############################################################
 database.clear_database()
 ########################################################################################################################################################################
@@ -30,7 +30,7 @@ database.clear_database()
 # Test to create a user successfully
 def test_create_user():
     """Test creating a user and validate the response."""
-
+  
     user_data = {
         "first_name": "testFirstName",
         "last_name": "testLastName",
