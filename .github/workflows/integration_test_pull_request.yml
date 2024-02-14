@@ -66,4 +66,4 @@ jobs:
           WEB_SITE_PORT: 8000
         run: |
           pytest app/tests/integration_test.py
-          coverage report -m
+         
