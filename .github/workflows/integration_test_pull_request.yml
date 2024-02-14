@@ -27,7 +27,8 @@ jobs:
       # Install and initialize PostgreSQL
       - name: Install PostgreSQL
         run: sudo apt update && sudo apt install postgresql postgresql-contrib
-            echo ${{ secrets.PG_PASSWORD }}
+             echo ${{ secrets.PG_PASSWORD }}
+
 
       - name: Initialize PostgreSQL
         run: |
