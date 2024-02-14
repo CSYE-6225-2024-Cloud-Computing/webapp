@@ -18,7 +18,8 @@ def get_auth_headers(username: str, password: str) -> dict:
     headers = {'Authorization': f"Basic {base64.b64encode(concatenated_value.encode('utf-8')).decode('utf-8')}"}
     return headers
 
-###running-pr-01###
+###running-pr-02###
+
 ########################################################CLEAR DATABASE BEFORE STARTING INTEGRATION TESTING##############################################################
 database.clear_database()
 ########################################################################################################################################################################
