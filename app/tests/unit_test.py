@@ -111,7 +111,7 @@ def test_update_first_name():
 
     # Additional assertions based on the expected updated user data in the response
     assert updated_response.json()["first_name"] == "testRenameFirstName"
-    assert updated_response.json()["last_name"] == "testLastName"
+    assert updated_response.json()["last_name"] == "testRenameLastName"
 
 ########################################################################################################################################################################
 
@@ -153,7 +153,7 @@ def test_update_read_pass():
 
     # Additional assertions based on the expected updated user data in the response
     assert updated_pass_response.json()["first_name"] == "testRenameFirstName"
-    assert updated_pass_response.json()["last_name"] == "testLastName"
+    assert updated_pass_response.json()["last_name"] == "testRenameLastName"
 
 ########################################################################################################################################################################
 
