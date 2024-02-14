@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout ️
         uses: actions/checkout@v2
 
       - name: Set up Python 3.9
@@ -28,24 +28,20 @@ jobs:
           sudo service postgresql start
           echo ${{ secrets.PG_PASSWORD }}
 
-      - name: Adjust Permissions on PostgreSQL Socket File
+      - name: Initialize PostgreSQL
+        run: |
+          sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD '${{ secrets.PG_PASSWORD }}'; CREATE DATABASE sjdatabase;"
+
+      - name: Enable and start PostgreSQL
+        run: sudo systemctl enable postgresql && sudo systemctl start postgresql
+
+      - name: Adjust Permissions on PostgreSQL Socket File (optional)
         run: sudo chmod 777 /var/run/postgresql/.s.PGSQL.5432 || true
 
-      - name: Change PostgreSQL Password
-        run: |
-          sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '${{ secrets.PG_PASSWORD }}';"
-          echo ${{ secrets.PG_PASSWORD }}
-
-      - name: Update PostgreSQL Authentication Method
+      - name: Update PostgreSQL Authentication Method (optional)
         run: |
           sudo sed -i 's/^\(host.*all.*all.*\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
-
-      - name: Restart PostgreSQL
-        run: sudo systemctl restart postgresql
-
-      - name: Create PostgreSQL Database
-        run: |
-          sudo -u postgres psql -c "CREATE DATABASE sjdatabase;"
+          sudo systemctl restart postgresql
 
       - name: Configure PostgreSQL connection
         run: |
@@ -67,6 +63,9 @@ jobs:
           WEB_SITE_PORT: 8000
         run: |
           pytest app/tests/integration_test.py
+          
+
+
 
 
 
