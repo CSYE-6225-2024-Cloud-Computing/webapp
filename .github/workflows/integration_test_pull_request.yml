@@ -1,14 +1,14 @@
 name: Integration Tests
 
-on:
-  pull_request:
-    branches:
-      - main
-
 # on:
-#   push:
+#   pull_request:
 #     branches:
-#       - branch-01
+#       - main
+
+on:
+  push:
+    branches:
+      - branch-01
 
 jobs:
   test:
@@ -40,13 +40,13 @@ jobs:
       - name: Enable and start PostgreSQL
         run: sudo systemctl enable postgresql && sudo systemctl start postgresql
 
-      - name: Adjust Permissions on PostgreSQL Socket File (optional)
-        run: sudo chmod 777 /var/run/postgresql/.s.PGSQL.5432 || true
+      # - name: Adjust Permissions on PostgreSQL Socket File (optional)
+      #   run: sudo chmod 777 /var/run/postgresql/.s.PGSQL.5432 || true ...
 
-      - name: Update PostgreSQL Authentication Method (optional)
-        run: |
-          sudo sed -i 's/^\(host.*all.*all.*\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
-          sudo systemctl restart postgresql
+      # - name: Update PostgreSQL Authentication Method (optional)
+      #   run: |
+      #     sudo sed -i 's/^\(host.*all.*all.*\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
+      #     sudo systemctl restart postgresql
 
       - name: Configure PostgreSQL Connection
         run: |
