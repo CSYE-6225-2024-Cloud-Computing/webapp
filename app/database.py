@@ -61,6 +61,7 @@ def clear_database():
     Base.metadata.create_all(bind=engine)
 
 
+
 # if os.getenv('POSTGRES_DATABASE_URL'):
 #     engine = create_engine(os.getenv('POSTGRES_DATABASE_URL'))
 # else:
