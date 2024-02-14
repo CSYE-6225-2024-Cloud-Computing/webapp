@@ -1,9 +1,14 @@
 name: Integration Tests
 
+# on:
+#   pull_request:
+#     branches:
+#       - main
+
 on:
-  pull_request:
-    branches:
-      - main
+    push:
+      branches:
+        - branch-01
 
 jobs:
   test:
@@ -72,23 +77,3 @@ jobs:
         run: |
           pytest app/tests/integration_test.py
 
-
-
-# """
-# try to print secrets with echo
-
-#       - name: Run Integration Tests
-#         run: echo ${{ secrets.PG_PASSWORD }}
-
-#       - name: Run Integration Tests
-#         run: echo ${{ secrets.PG_PASSWORD }}
-
-
-# next export directly as env var 
-# or
-# create a .env file with 
-#       - name: Run Integration Tests
-#         run:  echo DATABASE_URL=postgresql://$PG_USER:$PG_PASSWORD@localhost:5432/sjdatabase >> .env
-
-
-# """
