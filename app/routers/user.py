@@ -42,6 +42,15 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
             if param not in data:
                 error_message = {"detail": f"Parameter {param} is missing"}
                 return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message, headers=headers)
+            
+        # Check if there are any extra parameters in the request
+        allowed_params = set(required_params)
+        request_params = set(data.keys())
+        if not request_params.issubset(allowed_params):
+            extra_params = request_params - allowed_params
+            error_message = {"detail": f"Extra parameters in request: {', '.join([f'{param}' for param in extra_params])} not allowed"}
+            return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message)
+
         
         # Validate user data
         print("validate pleaseee")
