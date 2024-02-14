@@ -9,17 +9,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: sjdatabase
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
@@ -29,14 +18,15 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install dependencies
+      - name: Install PostgreSQL
         run: |
-          pip install -r app/requirements.txt
-          pip install pytest-cov
-          pip install psycopg2-binary
+          sudo apt-get update
+          sudo apt-get install postgresql postgresql-contrib
 
       - name: Start PostgreSQL Service
-        run: sudo service postgresql start
+        run: |
+          sudo service postgresql start
+          echo ${{ secrets.PG_PASSWORD }}
 
       - name: Adjust Permissions on PostgreSQL Socket File
         run: sudo chmod 777 /var/run/postgresql/.s.PGSQL.5432 || true
@@ -61,6 +51,12 @@ jobs:
         run: |
           export DATABASE_URL=postgresql://postgres:${{secrets.PG_PASSWORD}}@localhost:5432/sjdatabase
           echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          pip install -r app/requirements.txt
+          pip install pytest-cov
+          pip install psycopg2-binary
 
       - name: Run Tests
         env:
