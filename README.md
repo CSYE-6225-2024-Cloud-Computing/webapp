@@ -66,4 +66,6 @@ uvicorn main:app --reload
 
 7. **Deployment**: Follow your deployment strategy to deploy the application to your production environment.
 
+
+
 <hr>
