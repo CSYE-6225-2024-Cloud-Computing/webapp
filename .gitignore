@@ -167,4 +167,5 @@ cython_debug/
 # Java WAR files
 *.war
 
+/packer/key.json
 

@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request, Response, HTTPException
 
 
 def create_database_engine():
-    database_url = os.getenv('POSTGRES_DATABASE_URL')
+    database_url = os.getenv('POSTGRES_DATABASE_URL', '')
     if database_url:
         try:
             engine = create_engine(database_url)
