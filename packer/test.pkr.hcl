@@ -81,7 +81,7 @@ build {
       "sudo chmod +x /home/csye6225/webapp/packer/databaseInstall.sh",
       "sudo /home/csye6225/webapp/packer/databaseInstall.sh",
       # Python Installation
-      "chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
+      "sudo chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
       "sudo /home/csye6225/webapp/packer/pythonInstall.sh",      
       # Pip Requirements Installation
       "sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt", 
