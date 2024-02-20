@@ -75,25 +75,25 @@ build {
       # copy service file to the correct location
       "sudo cp /home/csye6225/webapp/service/webapp.service /etc/systemd/system/webapp.service",
       # User Creation Installation
-      "chmod +x /home/csye6225/webapp/packer/userInstall.sh",
+      "sudo chmod +x /home/csye6225/webapp/packer/userInstall.sh",
       "sudo /home/csye6225/webapp/packer/userInstall.sh",
-      # Database Installation
-      "chmod +x /home/csye6225/webapp/packer/databaseInstall.sh",
-      "sudo /home/csye6225/webapp/packer/databaseInstall.sh",
-      # Python Installation
-      "chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
-      "sudo /home/csye6225/webapp/packer/pythonInstall.sh",      
-      # Pip Requirements Installation
-      "sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt", 
-      "echo '================================================================================================================================================'",
-      "echo 'Requirements.txt installations completed.'",
-      "echo '================================================================================================================================================'",
-      #give ownership permission to csye6225
-      "sudo chown -R csye6225:csye6225 /home/csye6225/webapp/",
-      "echo '================================================================================================================================================'",
-      "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
-      "echo '================================================================================================================================================'",
-      "echo '================================================================================================================================================'",
+      // # Database Installation
+      // "sudo chmod +x /home/csye6225/webapp/packer/databaseInstall.sh",
+      // "sudo /home/csye6225/webapp/packer/databaseInstall.sh",
+      // # Python Installation
+      // "chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
+      // "sudo /home/csye6225/webapp/packer/pythonInstall.sh",      
+      // # Pip Requirements Installation
+      // "sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt", 
+      // "echo '================================================================================================================================================'",
+      // "echo 'Requirements.txt installations completed.'",
+      // "echo '================================================================================================================================================'",
+      // #give ownership permission to csye6225
+      // "sudo chown -R csye6225:csye6225 /home/csye6225/webapp/",
+      // "echo '================================================================================================================================================'",
+      // "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
+      // "echo '================================================================================================================================================'",
+      // "echo '================================================================================================================================================'",
       "echo 'Custom image setup completed'",
       "echo '================================================================================================================================================'"
 
