@@ -47,6 +47,11 @@ build {
     destination = "/tmp/webapp.zip"
   }
 
+  // provisioner "file" {
+  //   source      = "./webapp-fork.zip"
+  //   destination = "/tmp/webapp.zip"
+  // }
+
   provisioner "shell" {
     inline = [
       # Install unzip utility 
@@ -54,8 +59,8 @@ build {
       # Install application dependencies and copy artifacts and configuration files
       "sudo unzip /tmp/webapp.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
       "echo '================================================================================================================================================'",
-      "echo 'Unzipping Completed.",
-      "echo '================================================================================================================================================'",
+      "echo 'Unzipping Completed.'",
+      "echo '================================================================================================================================================'"
       # copy service file to the correct location
       "sudo cp /home/csye6225/webapp/service/webapp.service /lib/systemd/system/webapp.service",
       # User Creation Installation
@@ -80,6 +85,7 @@ build {
       "echo '================================================================================================================================================'",
       "echo 'Custom image setup completed'",
       "echo '================================================================================================================================================'"
+    
     ]
   }
 }
