@@ -36,7 +36,7 @@ source "googlecompute" "centos-stream-8" {
   image_labels = {
     environment = "dev"
   }
-  ssh_username     = "packer"
+  ssh_username = "packer"
 }
 
 build {
@@ -48,9 +48,15 @@ build {
   }
 
   // provisioner "file" {
-  //   source      = "./webapp-fork.zip"
-  //   destination = "/tmp/webapp.zip"
+  //   source      = "./webapp-fork-packer-br.zip"
+  //   destination = "/tmp/webapp-fork-packer-br.zip"
   // }
+
+  // provisioner "file" {
+  //   source      = "./webapp-main.zip"
+  //   destination = "/tmp/webapp-main.zip"
+  // }
+
 
   provisioner "shell" {
     inline = [
@@ -60,32 +66,32 @@ build {
       "sudo unzip /tmp/webapp.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
       "echo '================================================================================================================================================'",
       "echo 'Unzipping Completed.'",
-      "echo '================================================================================================================================================'",
-      # copy service file to the correct location
-      "sudo cp /home/csye6225/webapp/service/webapp.service /lib/systemd/system/webapp.service",
-      # User Creation Installation
-      "chmod +x /home/csye6225/webapp/packer/userInstall.sh",
-      "sudo /home/csye6225/webapp/packer/userInstall.sh",
-      # Database Installation
-      "chmod +x /home/csye6225/webapp/packer/databaseInstall.sh",
-      "sudo /home/csye6225/webapp/packer/databaseInstall.sh",
-      # Python Installation
-      "chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
-      "sudo /home/csye6225/webapp/packer/pythonInstall.sh",      
-      # Pip Requirements Installation
-      "sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt", 
-      "echo '================================================================================================================================================'",
-      "echo 'Requirements.txt installations completed.'",
-      "echo '================================================================================================================================================'",
-      #give ownership permission to csye6225
-      "sudo chown -R csye6225:csye6225 /home/csye6225/webapp/",
-      "echo '================================================================================================================================================'",
-      "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
-      "echo '================================================================================================================================================'",
-      "echo '================================================================================================================================================'",
-      "echo 'Custom image setup completed'",
       "echo '================================================================================================================================================'"
-    
+      // # copy service file to the correct location
+      // "sudo cp /home/csye6225/webapp/service/webapp.service /etc/systemd/system/webapp.service ",
+      // # User Creation Installation
+      // "chmod +x /home/csye6225/webapp/packer/userInstall.sh",
+      // "sudo /home/csye6225/webapp/packer/userInstall.sh",
+      // # Database Installation
+      // "chmod +x /home/csye6225/webapp/packer/databaseInstall.sh",
+      // "sudo /home/csye6225/webapp/packer/databaseInstall.sh",
+      // # Python Installation
+      // "chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
+      // "sudo /home/csye6225/webapp/packer/pythonInstall.sh",      
+      // # Pip Requirements Installation
+      // "sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt", 
+      // "echo '================================================================================================================================================'",
+      // "echo 'Requirements.txt installations completed.'",
+      // "echo '================================================================================================================================================'",
+      // #give ownership permission to csye6225
+      // "sudo chown -R csye6225:csye6225 /home/csye6225/webapp/",
+      // "echo '================================================================================================================================================'",
+      // "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
+      // "echo '================================================================================================================================================'",
+      // "echo '================================================================================================================================================'",
+      // "echo 'Custom image setup completed'",
+      // "echo '================================================================================================================================================'"
+
     ]
   }
 }
