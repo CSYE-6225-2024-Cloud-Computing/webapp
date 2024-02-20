@@ -44,7 +44,7 @@ build {
   sources = ["source.googlecompute.centos-stream-8"]
 
   provisioner "file" {
-    source      = "../../webapp.zip"
+    source      = "../webapp.zip"
     destination = "/tmp/webapp.zip"
   }
   
@@ -66,7 +66,7 @@ build {
       # Install unzip utility 
       "sudo dnf install -y unzip",
       # Install application dependencies and copy artifacts and configuration files
-      "sudo unzip /tmp/webapp.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
+      "sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp", # Assuming the artifacts are in the root of the zip file
       "echo '================================================================================================================================================'",
       "echo 'Unzipping Completed.'",
       "echo '================================================================================================================================================'",
