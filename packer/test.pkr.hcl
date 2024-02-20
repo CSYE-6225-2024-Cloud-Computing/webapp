@@ -22,10 +22,6 @@ variable "zone" {
   default = "us-central1-a"
 }
 
-variable "gcp_service_account_key" {
-  type    = string
-}
-
 source "googlecompute" "centos-stream-8" {
   project_id              = var.project_id
   source_image_project_id = ["centos-cloud"]
@@ -41,7 +37,6 @@ source "googlecompute" "centos-stream-8" {
     environment = "dev"
   }
   ssh_username     = "packer"
-  credentials_file = var.gcp_service_account_key
 }
 
 build {

@@ -46,9 +46,8 @@ jobs:
       - name: Run Packer
         run: |
           cd packer
-          packer init final.pkr.hcl
-          packer build \
-            -var "gcp_service_account_key=${{secrets.GCP_SERVICE_ACCOUNT_KEY}}" final.pkr.hcl
+          packer init test.pkr.hcl
+          packer build test.pkr.hcl
 
       # - name: Build GMI (Google Machine Image)
       #   if: success()
