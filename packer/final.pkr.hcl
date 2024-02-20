@@ -37,7 +37,7 @@ source "googlecompute" "centos-stream-8" {
   network                 = "default" # Ensure this is the name of your VPC network
   image_description       = "Custom image with PostgreSQL"
   image_labels = {
-    environment = "dev"
+    environment = "dev"   
   }
   ssh_username     = "packer"
   credentials_file = var.gcp_service_account_key

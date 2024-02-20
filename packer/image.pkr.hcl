@@ -31,6 +31,7 @@ source "googlecompute" "centos-stream-8" {
   credentials_file = "./key.json"
 }
 
+
 build {
   sources = ["source.googlecompute.centos-stream-8"]
 
