@@ -21,6 +21,9 @@ variable "zone" {
   type    = string
   default = "us-central1-a"
 }
+variable "gcp_service_account_key" {
+  type    = string
+}
 
 source "googlecompute" "centos-stream-8" {
   project_id              = var.project_id
@@ -34,14 +37,50 @@ source "googlecompute" "centos-stream-8" {
   network                 = "default" # Ensure this is the name of your VPC network
   image_description       = "Custom image with PostgreSQL"
   image_labels = {
-    environment = "dev"
+    environment = "dev"   
   }
   ssh_username     = "packer"
-  credentials_file = "./key.json"
+  credentials_file = var.gcp_service_account_key
 }
 
 build {
   sources = ["source.googlecompute.centos-stream-8"]
+
+  provisioner "file" {
+    source      = "./pythonInstall.sh"
+    destination = "/tmp/pythonInstall.sh"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "chmod +x /tmp/pythonInstall.sh",
+      "sudo /tmp/pythonInstall.sh"
+    ]
+  }
+
+  provisioner "file" {
+    source      = "./userInstall.sh"
+    destination = "/tmp/userInstall.sh"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "chmod +x /tmp/userInstall.sh",
+      "sudo /tmp/userInstall.sh"
+    ]
+  }
+
+  provisioner "file" {
+    source      = "./databaseInstall.sh"
+    destination = "/tmp/databaseInstall.sh"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "chmod +x /tmp/databaseInstall.sh",
+      "sudo /tmp/databaseInstall.sh"
+    ]
+  }
 
   provisioner "file" {
     source      = "./webapp-main.zip"
