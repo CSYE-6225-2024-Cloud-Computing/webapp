@@ -21,6 +21,9 @@ variable "zone" {
   type    = string
   default = "us-central1-a"
 }
+variable "gcp_service_account_key" {
+  type    = string
+}
 
 source "googlecompute" "centos-stream-8" {
   project_id              = var.project_id
@@ -37,7 +40,7 @@ source "googlecompute" "centos-stream-8" {
     environment = "dev"
   }
   ssh_username     = "packer"
-  credentials_file = "./key.json"
+  credentials_file = var.gcp_service_account_key
 }
 
 build {
@@ -95,40 +98,15 @@ build {
       "sudo dnf install -y unzip",
       # Install application dependencies and copy artifacts and configuration files
       "sudo unzip /tmp/webapp-main.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
-      "sudo cp /tmp/.env /home/csye6225/webapp-main/.env ",
-      "echo '================================================================================================================================================'",
-      "echo 'Environment file created in webapp'",
-      "echo '================================================================================================================================================'",
-      "sudo chown -R csye6225:csye6225 /home/csye6225/webapp-main/",
+      "sudo chown -R csye6225:csye6225 /home/csye6225/`cd /",
       "echo '================================================================================================================================================'",
       "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
       "echo '================================================================================================================================================'",
-      # Upgrade pip to the latest version
-      #"sudo pip3.9 install --upgrade pip",
       "sudo pip3.9 install -r /home/csye6225/webapp-main/app/requirements.txt", # Install Python dependencies
       "echo '================================================================================================================================================'",
       "echo 'Requirements.txt installations completed.'",
       "echo '================================================================================================================================================'",
       "sudo cp /tmp/.env /home/csye6225/webapp-main/.env ",
-    //    # Run integration tests
-    //   "pwd",
-    //   #"sudo cd /home/csye6225/webapp-main/app/tests", # Adjust the path based on your application structure
-    //   "sudo pip3.9 install pytest",
-    //   "which pytest",
-    //   "ls -ld /home/packer",
-    //   "sudo chmod 755 /home/packer",
-    //   "sudo -u csye6225 /usr/local/bin/pytest -v /home/csye6225/webapp-main/app/tests/integration_test.py",
-    //   "if [ $? -eq 0 ]; then",
-    //   "  echo 'Integration tests passed';",
-    //   "else",
-    //   "  echo 'Integration tests failed';",
-    //   "  exit 1;",
-    //   "fi",
-
-      # Print completion message
-    //   "echo '================================================================================================================================================'",
-    //   "echo 'Integration Test completed.'",
-    //   "echo '================================================================================================================================================'",
 
       "echo '================================================================================================================================================'",
       "echo 'Custom image setup completed'",
