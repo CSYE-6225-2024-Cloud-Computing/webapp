@@ -1,4 +1,4 @@
-name: Build AMI using Packer
+name: Build Google Custom Image Using Packer
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_ami:
-    name: db_health_check
+    name: integration_test_packer_build
     runs-on: ubuntu-latest
 
     steps:
@@ -48,21 +48,3 @@ jobs:
           cd packer
           packer init test.pkr.hcl
           packer build test.pkr.hcl
-
-      # - name: Build GMI (Google Machine Image)
-      #   if: success()
-      #   run: |
-      #     cd deployment/ami
-      #     packer init ./
-      #     packer build \
-      #       -var "aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" \
-      #       -var "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
-      #       -var "source_ami=${{ vars.SOURCE_AMI }}" \
-      #       -var "ami_region=${{ vars.AMI_REGION }}" \
-      #       -var "zip_file_path=${{ vars.APP_ZIP_PATH }}" \
-      #       -var "ssh_username=${{ vars.SSH_USERNAME }}" \
-      #       -var "subnet_id=${{ vars.SUBNET_ID }}" \
-      #       -var "instanceType=${{ vars.INSTANCE_TYPE }}" \
-      #       -var "ebsVolumeSize=${{ vars.EBS_VOLUME_SIZE }}" \
-      #       -var "ebsVolumeType=${{ vars.EBS_VOLUME_TYPE }}" \
-      #       -var "webappDestinationFolder=${{ vars.WEBAPP_DESTINATION_PATH }}" .
