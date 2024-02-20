@@ -39,6 +39,7 @@ source "googlecompute" "centos-stream-8" {
   ssh_username = "packer"
 }
 
+
 build {
   sources = ["source.googlecompute.centos-stream-8"]
 
