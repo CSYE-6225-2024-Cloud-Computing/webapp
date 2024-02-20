@@ -32,11 +32,16 @@ jobs:
       - name: Setting up packer
         uses: hashicorp/setup-packer@main
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
         with:
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          project_id: ${{ vars.GCP_PROJECT_ID }}
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+        
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+  
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
 
       - name: Run Packer
         run: |
