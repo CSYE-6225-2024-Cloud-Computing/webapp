@@ -65,6 +65,8 @@ build {
       # Install unzip utility 
       # Install unzip utility 
       "sudo dnf install -y unzip",
+      # Create the target directory if it doesn't exist
+      "sudo mkdir -p /home/csye6225/webapp",
       # Install application dependencies and copy artifacts and configuration files
       "sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp", # Assuming the artifacts are in the root of the zip file
       "echo '================================================================================================================================================'",
