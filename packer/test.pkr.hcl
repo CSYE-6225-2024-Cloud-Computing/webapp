@@ -60,7 +60,7 @@ build {
       "sudo unzip /tmp/webapp.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
       "echo '================================================================================================================================================'",
       "echo 'Unzipping Completed.'",
-      "echo '================================================================================================================================================'"
+      "echo '================================================================================================================================================'",
       # copy service file to the correct location
       "sudo cp /home/csye6225/webapp/service/webapp.service /lib/systemd/system/webapp.service",
       # User Creation Installation
