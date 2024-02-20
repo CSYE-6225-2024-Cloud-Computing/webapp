@@ -43,7 +43,7 @@ build {
   sources = ["source.googlecompute.centos-stream-8"]
 
   provisioner "file" {
-    source      = "../webapp-fork.zip"
+    source      = "../webapp.zip"
     destination = "/tmp/webapp-main.zip"
   }
 
