@@ -6,7 +6,7 @@ After=network.target
 
 [Service]
 User=cloudsj1604
-WorkingDirectory=/home/csye6225/webapp-main
+WorkingDirectory=/home/csye6225/webapp
 ExecStart=uvicorn app.main:app --host 0.0.0.0 --port 8000
 Restart=always
 

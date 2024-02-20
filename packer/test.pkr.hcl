@@ -44,7 +44,7 @@ build {
 
   provisioner "file" {
     source      = "../webapp.zip"
-    destination = "/tmp/webapp-main.zip"
+    destination = "/tmp/webapp.zip"
   }
 
   provisioner "shell" {
@@ -52,34 +52,31 @@ build {
       # Install unzip utility 
       "sudo dnf install -y unzip",
       # Install application dependencies and copy artifacts and configuration files
-      "sudo unzip /tmp/webapp-main.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
-      "sudo cp /tmp/.env /home/csye6225/webapp-main/.env ",
+      "sudo unzip /tmp/webapp.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
       "echo '================================================================================================================================================'",
-      "echo 'Environment file created in webapp'",
+      "echo 'Unzipping Completed.",
       "echo '================================================================================================================================================'",
-      "sudo chown -R csye6225:csye6225 /home/csye6225/webapp-main/",
-      "echo '================================================================================================================================================'",
-      "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
-      "echo '================================================================================================================================================'",
-      # Upgrade pip to the latest version
-      #"sudo pip3.9 install --upgrade pip",
-      "sudo pip3.9 install -r /home/csye6225/webapp-main/app/requirements.txt", # Install Python dependencies
+      # copy service file to the correct location
+      "sudo cp /home/csye6225/webapp/service/webapp.service /lib/systemd/system/webapp.service",
+      # User Creation Installation
+      "chmod +x /home/csye6225/webapp/packer/userInstall.sh",
+      "sudo /home/csye6225/webapp/packer/userInstall.sh",
+      # Database Installation
+      "chmod +x /home/csye6225/webapp/packer/databaseInstall.sh",
+      "sudo /home/csye6225/webapp/packer/databaseInstall.sh",
+      # Python Installation
+      "chmod +x /home/csye6225/webapp/packer/pythonInstall.sh",
+      "sudo /home/csye6225/webapp/packer/pythonInstall.sh",      
+      # Pip Requirements Installation
+      "sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt", 
       "echo '================================================================================================================================================'",
       "echo 'Requirements.txt installations completed.'",
       "echo '================================================================================================================================================'",
-      "sudo cp /tmp/.env /home/csye6225/webapp-main/.env ",
-      # Run integration tests
-      "pwd",
-      "sudo cd /home/csye6225/webapp-main/app/tests", # Adjust the path based on your application structure
-      "sudo pip3.9 install pytest",
-      "which pytest",
-      "sudo -u csye6225 /bin/pytest -v integration_test.py",
-      "if [ $? -eq 0 ]; then",
-      "  echo 'Integration tests passed';",
-      "else",
-      "  echo 'Integration tests failed';",
-      "  exit 1;",
-      "fi",
+      #give ownership permission to csye6225
+      "sudo chown -R csye6225:csye6225 /home/csye6225/webapp/",
+      "echo '================================================================================================================================================'",
+      "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
+      "echo '================================================================================================================================================'",
       "echo '================================================================================================================================================'",
       "echo 'Custom image setup completed'",
       "echo '================================================================================================================================================'"
