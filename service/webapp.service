@@ -1,0 +1,14 @@
+# yourapp.service
+
+[Unit]
+Description=Ru-API Python Module
+After=network.target
+
+[Service]
+User=cloudsj1604
+WorkingDirectory=/home/csye6225/webapp-main
+ExecStart=uvicorn app.main:app --host 0.0.0.0 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
