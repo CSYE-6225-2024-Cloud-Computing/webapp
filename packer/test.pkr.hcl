@@ -70,8 +70,8 @@ build {
       "echo '================================================================================================================================================'",
       "echo 'Unzipping Completed.'",
       "echo '================================================================================================================================================'"
-      // # copy service file to the correct location
-      // "sudo cp /home/csye6225/webapp/service/webapp.service /etc/systemd/system/webapp.service ",
+      # copy service file to the correct location
+      "sudo cp /home/csye6225/service/webapp.service /etc/systemd/system/webapp.service ",
       // # User Creation Installation
       // "chmod +x /home/csye6225/webapp/packer/userInstall.sh",
       // "sudo /home/csye6225/webapp/packer/userInstall.sh",
