@@ -63,6 +63,7 @@ build {
   provisioner "shell" {
     inline = [
       # Install unzip utility 
+      # Install unzip utility 
       "sudo dnf install -y unzip",
       # Install application dependencies and copy artifacts and configuration files
       "sudo unzip /tmp/webapp.zip -d /home/csye6225/", # Assuming the artifacts are in the root of the zip file
