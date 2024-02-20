@@ -16,10 +16,17 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 # Set password for the postgres user in PostgreSQL
-sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+sudo -u postgres psql -c "ALTER USER WITH PASSWORD 'postgres';"
+
+# back up your pg_hba.conf
+sudo cp /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.bak
 
 # Update pg_hba.conf file to use md5 authentication
+sudo chmod 660 /var/lib/pgsql/data/pg_hba.conf
 sudo sed -i 's/^\(host.*all.*all.\)\(ident\)\(.*\)$/\1md5\3/g' /var/lib/pgsql/data/pg_hba.conf
+
+#sudo sed -i 's/^\(host[[:space:]]*all[[:space:]]*all.\)\(ident\)\(.*\)$/\1md5\3/g' /var/lib/pgsql/data/pg_hba.conf
+
 
 # Restart PostgreSQL to apply changes
 sudo systemctl restart postgresql
