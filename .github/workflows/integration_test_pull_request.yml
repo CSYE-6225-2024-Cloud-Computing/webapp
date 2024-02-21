@@ -50,6 +50,7 @@ jobs:
           pip install -r app/requirements.txt
           pip install pytest-cov
           pip install psycopg2-binary
+          pip install httpx
 
       - name: Run Tests
         env:
