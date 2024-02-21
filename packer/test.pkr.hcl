@@ -82,11 +82,11 @@ build {
       "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
       "echo '================================================================================================================================================'",
       # Reload systemd to pick up changes
-      "sudo systemctl daemon-reload"
+      "sudo systemctl daemon-reload",
       # Enable the webapp.service to start on boot
-      "sudo systemctl enable /etc/systemd/system/webapp.service"
+      "sudo systemctl enable /etc/systemd/system/webapp.service",
       # Start the webapp.service
-      "sudo systemctl start /etc/systemd/system/webapp.service"
+      "sudo systemctl start /etc/systemd/system/webapp.service",
       "echo '================================================================================================================================================'",
       "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
       "echo '================================================================================================================================================'",
