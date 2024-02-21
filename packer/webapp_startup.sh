@@ -20,7 +20,7 @@ sudo /home/csye6225/webapp/packer/userInstall.sh
 
 # Copy service file to the correct location
 sudo cp /home/csye6225/webapp/service/webapp.service /etc/systemd/system/webapp.service
-#sudo chown csye6225:csye6225 /etc/systemd/system/webapp.service
+sudo chown csye6225:csye6225 /etc/systemd/system/webapp.service
 sudo chmod 550 /etc/systemd/system/webapp.service
 
 # Database Installation
@@ -39,7 +39,7 @@ echo 'Requirements.txt installations completed.'
 echo '================================================================================================================================================'
 
 # Give ownership permission to csye6225
-#sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
+sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
 
 echo '================================================================================================================================================'
 echo 'Ownership of the application directory set to the dedicated user - csye6225'
