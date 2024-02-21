@@ -50,6 +50,6 @@ build {
   
 
   provisioner "shell" {
-  script = "setup_webapp.sh"
+  script = "webapp_startup.sh"
 }
 }
