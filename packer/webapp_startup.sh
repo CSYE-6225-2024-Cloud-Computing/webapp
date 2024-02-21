@@ -49,10 +49,10 @@ echo '==========================================================================
 sudo systemctl daemon-reload
 
 # Enable the webapp.service to start on boot
-sudo systemctl enable webapp
+sudo systemctl enable webapp.service
 
 # Start the webapp.service
-sudo systemctl start webapp
+sudo systemctl start webapp.service
 
 echo '================================================================================================================================================'
 echo 'Ownership of the application directory set to the dedicated user - csye6225'
