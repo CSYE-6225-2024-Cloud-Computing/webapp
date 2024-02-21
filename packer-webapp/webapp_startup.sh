@@ -15,8 +15,8 @@ echo '==========================================================================
 
 
 # User Creation Installation
-sudo chmod +x /home/csye6225/webapp/packer/userInstall.sh
-sudo /home/csye6225/webapp/packer/userInstall.sh
+sudo chmod +x /home/csye6225/webapp/packer-webapp/userInstall.sh
+sudo /home/csye6225/webapp/packer-webapp/userInstall.sh
 
 # Copy service file to the correct location
 sudo cp /home/csye6225/webapp/service/webapp.service /etc/systemd/system/webapp.service
@@ -24,12 +24,12 @@ sudo chown csye6225:csye6225 /etc/systemd/system/webapp.service
 sudo chmod 550 /etc/systemd/system/webapp.service
 
 # Database Installation
-sudo chmod +x /home/csye6225/webapp/packer/databaseInstall.sh
-sudo /home/csye6225/webapp/packer/databaseInstall.sh
+sudo chmod +x /home/csye6225/webapp/packer-webapp/databaseInstall.sh
+sudo /home/csye6225/webapp/packer-webapp/databaseInstall.sh
 
 # Python Installation
-sudo chmod +x /home/csye6225/webapp/packer/pythonInstall.sh
-sudo /home/csye6225/webapp/packer/pythonInstall.sh
+sudo chmod +x /home/csye6225/webapp/packer-webapp/pythonInstall.sh
+sudo /home/csye6225/webapp/packer-webapp/pythonInstall.sh
 
 # Pip Requirements Installation
 sudo pip3.9 install -r /home/csye6225/webapp/app/requirements.txt 
