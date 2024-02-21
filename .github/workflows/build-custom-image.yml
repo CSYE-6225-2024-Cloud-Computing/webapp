@@ -6,28 +6,9 @@ on:
       - packer-br
 
 jobs:
-  build_ami:
-    name: integration_test_packer_build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check if this push is from a PR merge
-        run: |
-          if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
-            echo "This push is from a pull request merge."
-          else
-            echo "This push is not from a pull request merge."
-            exit 1
-          fi
-
-      - name: Checkout code
-        if: success()
-        uses: actions/checkout@v2
-
-      #ADD INTEGRATION FROM JOBS
-  
   integration_test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -76,7 +57,25 @@ jobs:
         run: |
           pytest app/tests/integration_test.py
 
-          
+  build_ami:
+    name: custom_image_build
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Check if this push is from a PR merge
+        run: |
+          if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
+            echo "This push is from a pull request merge."
+          else
+            echo "This push is not from a pull request merge."
+            exit 1
+          fi
+
+      - name: Checkout code
+        if: success()
+        uses: actions/checkout@v2
+
       - name: Zip Folder
         if: success()
         run: zip -r webapp.zip .
@@ -88,10 +87,10 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-        
+
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
-  
+
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
@@ -100,10 +99,9 @@ jobs:
           cd packer
           packer init test.pkr.hcl
           packer build \
-          -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
-          -var="source_image_family=centos-stream-8" \
-          -var="zone=us-central1-a" \
-          test.pkr.hcl
+            -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
+            -var="source_image_family=centos-stream-8" \
+            -var="zone=us-central1-a" \
+            test.pkr.hcl
         
-        #packer build -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="source_image_family=centos-stream-8" -var="zone=us-central1-a" test.pkr.hcl
-       #packer build test.pkr.hcl
+  
