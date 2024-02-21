@@ -1,7 +1,7 @@
 # yourapp.service
 
 [Unit]
-Description=Ru-API Python Module
+Description=FastAPI Python Module
 After=network.target
 
 [Service]
@@ -12,3 +12,4 @@ Restart=always
 
 [Install]
 WantedBy=multi-user.target
+
