@@ -50,6 +50,7 @@ jobs:
           pip install -r app/requirements.txt
           pip install pytest-cov
           pip install psycopg2-binary
+          pip install httpx
 
       - name: Run Tests
         env:
@@ -60,6 +61,7 @@ jobs:
   build_ami:
     name: custom_image_build
     runs-on: ubuntu-latest
+    needs: integration_test
 
 
     steps:
