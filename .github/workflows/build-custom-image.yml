@@ -98,7 +98,7 @@ jobs:
 
       - name: Run Packer
         run: |
-          cd packer
+          cd packer-webapp
           packer init image.pkr.hcl
           packer build \
             -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
