@@ -101,7 +101,7 @@ jobs:
           cd packer-webapp
           packer init image.pkr.hcl
           packer build \
-            -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
+            -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
             -var="source_image_family=${{ vars.SOURCE_IMAGE_FAMILY}}" \
             -var="zone=${{ vars.ZONE}}" \
             -var="disk_size=${{ vars.DISK_SIZE }}" \
