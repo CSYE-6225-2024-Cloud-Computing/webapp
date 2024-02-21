@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    googlecompute = {
+      version = ">= 0.0.1"
+      source  = "github.com/hashicorp/googlecompute"
+    }
+  }
+}
+
 variable "project_id" {
   type    = string
   default = "dev-gcp-project-414615"
@@ -12,23 +21,43 @@ variable "zone" {
   type    = string
   default = "us-central1-a"
 }
+variable "disk_size" {
+  type    = string
+  default = 100
+}
+
+variable "disk_type" {
+  type    = string
+  default = "pd-balanced"
+}
+
+variable "network" {
+  type    = string
+  default = "default"
+}
+
+variable "machine_type" {
+  type    = string
+  default = "n1-standard-1"
+}
+
+
 
 source "googlecompute" "centos-stream-8" {
   project_id              = var.project_id
   source_image_project_id = ["centos-cloud"]
   image_name              = "centos-8-packer-${formatdate("YYYYMMDDHHmmss", timestamp())}"
   source_image_family     = var.source_image_family
-  machine_type            = "n1-standard-1"
+  machine_type            = var.machine_type
   zone                    = var.zone
-  disk_size               = 100
-  disk_type               = "pd-balanced"
-  network                 = "default" # Ensure this is the name of your VPC network
+  disk_size               = var.disk_size
+  disk_type               = var.disk_type
+  network                 = var.network # Ensure this is the name of your VPC network
   image_description       = "Custom image with PostgreSQL"
   image_labels = {
     environment = "dev"
   }
-  ssh_username     = "packer"
-  credentials_file = "./key.json"
+  ssh_username = "packer"
 }
 
 
@@ -36,84 +65,13 @@ build {
   sources = ["source.googlecompute.centos-stream-8"]
 
   provisioner "file" {
-    source      = "./dependencies.sh"
-    destination = "/home/packer/dependencies.sh"
+    source      = "../webapp.zip"
+    destination = "/tmp/webapp.zip"
   }
+  
 
   provisioner "shell" {
-    inline = [
-      "cd /bin",
-      "chmod +x ~/dependencies.sh",
-      "~/dependencies.sh"
-    ]
+  script = "webapp_startup.sh"
   }
 
-  provisioner "shell" {
-    inline = [
-      "sudo yum install -y unzip",
-      "sudo unzip /tmp/webapp-main.zip -d /home/packer/"
-    ]
-  }
-
-    provisioner "shell" {
-    inline = [
-      "cd ~/webapp-main",
-      "python3 --version",
-      "pwd",
-      "ls",
-      "pip3 install -r app/requirements.txt"
-    ]
-  }
-
-//   provisioner "file" {
-//     source      = "./database.sh"
-//     destination = "/tmp/database.sh"
-//   }
-
-//   provisioner "shell" {
-//     inline = [
-//       "chmod +x /tmp/database.sh",
-//       "sudo /tmp/database.sh"
-//     ]
-//   }
-
-//   provisioner "file" {
-//     source      = "./user.sh"
-//     destination = "/tmp/user.sh"
-//   }
-
-//   provisioner "shell" {
-//     inline = [
-//       "chmod +x /tmp/user.sh",
-//       "sudo /tmp/user.sh"
-//     ]
-//   }
-
-//   provisioner "file" {
-//     source      = "./webapp-main.zip"
-//     destination = "/tmp/webapp-main.zip"
-//   }
-
-//   provisioner "shell" {
-//     inline = [
-//       "sudo yum install -y unzip",
-//       "sudo unzip /tmp/webapp-main.zip -d /tmp"
-//     ]
-//   }
-
-//   provisioner "shell" {
-//     inline = [
-//       "echo 'Web application files ownership set.'",
-//       "echo '============================================================================================================================================================================='",
-//       "cd /tmp/webapp-main",
-//       "python3 --version",
-//       "pwd",
-//       "ls",
-//       "pip3.9 install -r app/requirements.txt",
-//       "uvicorn app.main:app --reload"
-//     ]
-//   }
 }
-
-
-
