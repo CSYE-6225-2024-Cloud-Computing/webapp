@@ -49,20 +49,8 @@ build {
   }
   
 
-  // provisioner "file" {
-  //   source      = "./webapp-fork-packer-br.zip"
-  //   destination = "/tmp/webapp-fork-packer-br.zip"
-  // }
-
-  // provisioner "file" {
-  //   source      = "./webapp-main.zip"
-  //   destination = "/tmp/webapp-main.zip"
-  // }
-
-
   provisioner "shell" {
     inline = [
-      # Install unzip utility 
       # Install unzip utility 
       "sudo dnf install -y unzip",
       # Create the target directory if it doesn't exist
@@ -90,6 +78,15 @@ build {
       "echo '================================================================================================================================================'",
       #give ownership permission to csye6225
       "sudo chown -R csye6225:csye6225 /home/csye6225/webapp/",
+      "echo '================================================================================================================================================'",
+      "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
+      "echo '================================================================================================================================================'",
+      # Reload systemd to pick up changes
+      "sudo systemctl daemon-reload"
+      # Enable the webapp.service to start on boot
+      "sudo systemctl enable /etc/systemd/system/webapp.service"
+      # Start the webapp.service
+      "sudo systemctl start /etc/systemd/system/webapp.service"
       "echo '================================================================================================================================================'",
       "echo 'Ownership of the application directory set to the dedicated user - csye6225'",
       "echo '================================================================================================================================================'",
