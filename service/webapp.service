@@ -5,7 +5,7 @@ Description=FastAPI Python Module
 After=network.target
 
 [Service]
-User=cloudsj1604
+User=csye6225
 WorkingDirectory=/home/csye6225/webapp
 ExecStart=uvicorn app.main:app --host 0.0.0.0 --port 8000
 Restart=always
