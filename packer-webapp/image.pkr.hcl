@@ -7,7 +7,7 @@ packer {
   }
 }
 
-variable "project_id" {
+variable "project_id"   {
   type    = string
   default = "dev-gcp-project-414615"
 }
