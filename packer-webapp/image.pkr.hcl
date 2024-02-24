@@ -7,7 +7,7 @@ packer {
   }
 }
 
-variable "project_id"   {
+variable "project_id" {
   type    = string
   default = "dev-gcp-project-414615"
 }
@@ -44,7 +44,7 @@ variable "machine_type" {
 
 
 source "googlecompute" "centos-stream-8" {
-  project_id              = var.project_id
+  project_id              = var.project_i
   source_image_project_id = ["centos-cloud"]
   image_name              = "centos-8-packer-${formatdate("YYYYMMDDHHmmss", timestamp())}"
   source_image_family     = var.source_image_family
