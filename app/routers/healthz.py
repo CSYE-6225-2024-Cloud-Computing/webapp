@@ -10,6 +10,7 @@ router = APIRouter(
 
 @router.get("/")
 async def check_database_connection(request: Request):
+    # TODO: Add a return code for 503
     data = await request.body()
     if request.query_params or data:
         print("hello")
