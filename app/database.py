@@ -1,4 +1,5 @@
 import os
+import sys
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -25,18 +26,23 @@ def create_database_engine():
             print("\n=====================================================================")
             #raise e
     else:
-        SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-        try:
-            engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-            print("\n=====================================================================")
-            print(f"SQLITE DB Connected Successfuly")
-            print("\n=====================================================================")
-            return engine
+        print("\n=====================================================================")
+        print(f"Cannot find Connection to Postgres Database")
+        print("\n=====================================================================")
+        sys.exit()
 
-        except Exception as e:
-            print("\n=====================================================================")
-            print("Error connecting to the SQLITE database:")
-            print("\n=====================================================================")
+        # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
+        # try:
+        #     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+        #     print("\n=====================================================================")
+        #     print(f"SQLITE DB Connected Successfuly")
+        #     print("\n=====================================================================")
+        #     return engine
+
+        # except Exception as e:
+        #     print("\n=====================================================================")
+        #     print("Error connecting to the SQLITE database:")
+        #     print("\n=====================================================================")
 
 
 
