@@ -24,8 +24,8 @@ sudo chown csye6225:csye6225 /etc/systemd/system/webapp.service
 sudo chmod 550 /etc/systemd/system/webapp.service
 
 # Database Installation
-sudo chmod +x /home/csye6225/webapp/packer-webapp/databaseInstall.sh
-sudo /home/csye6225/webapp/packer-webapp/databaseInstall.sh
+# sudo chmod +x /home/csye6225/webapp/packer-webapp/databaseInstall.sh
+# sudo /home/csye6225/webapp/packer-webapp/databaseInstall.sh
 
 # Python Installation
 sudo chmod +x /home/csye6225/webapp/packer-webapp/pythonInstall.sh
