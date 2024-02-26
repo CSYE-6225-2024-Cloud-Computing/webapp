@@ -40,6 +40,7 @@ echo '==========================================================================
 
 # Give ownership permission to csye6225
 sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
+# TODO: add 755 permission to the app dir with R flag
 
 echo '================================================================================================================================================'
 echo 'Ownership of the application directory set to the dedicated user - csye6225'
