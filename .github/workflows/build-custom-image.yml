@@ -109,5 +109,7 @@ jobs:
             -var="network=${{ vars.NETWORK}}" \
             -var="machine_type=${{ vars.MACHINE_TYPE}}" \
             image.pkr.hcl
+
+            
         
   
