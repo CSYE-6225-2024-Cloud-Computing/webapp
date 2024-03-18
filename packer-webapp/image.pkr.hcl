@@ -41,6 +41,11 @@ variable "machine_type" {
   default = "n1-standard-1"
 }
 
+# New variable for Ops Agent installation script
+variable "ops_agent_script_path" {
+  type    = string
+  default = "packer-webapp/install_ops_agent.sh"  # Path to your Ops Agent installation script 
+}
 
 
 source "googlecompute" "centos-stream-8" {
