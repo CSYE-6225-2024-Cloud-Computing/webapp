@@ -24,7 +24,7 @@ def create_database_engine():
             print("\n=====================================================================")
             print("Error connecting to the PostgreSQL database:")
             print("\n=====================================================================")
-            #raise e
+            raise e
     else:
         print("\n=====================================================================")
         print(f"Cannot find Connection to Postgres Database")
