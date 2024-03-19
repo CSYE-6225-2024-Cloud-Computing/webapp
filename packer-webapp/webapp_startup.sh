@@ -15,7 +15,6 @@ sudo touch /var/log/webapp.log
 sudo chown csye6225:csye6225 /var/log/webapp.log
 # Grant write permission to user
 sudo chmod u+w /var/log/webapp.log
-ls -l /var/log/webapp.log
 
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
@@ -51,8 +50,8 @@ echo '==========================================================================
 
 # Copy the Ops Agent configuration file to the correct location
 sudo cp /home/csye6225/webapp/config.yaml /etc/google-cloud-ops-agent/config.yaml
-sudo chown csye6225:csye6225 /etc/google-cloud-ops-agent/config.yaml
-sudo chmod 550 /etc/google-cloud-ops-agent/config.yaml
+# sudo chown csye6225:csye6225 /etc/google-cloud-ops-agent/config.yaml
+# sudo chmod 550 /etc/google-cloud-ops-agent/config.yaml
 
 echo '================================================================================================================================================'
 echo 'google-cloud-ops-agent/config.yaml file copied'
