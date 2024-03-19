@@ -16,6 +16,7 @@ sudo touch /var/log/webapp.log
 sudo chown csye6225:csye6225 /var/log/webapp.log
 # Grant write permission to user
 sudo chmod u+w /var/log/webapp.log
+ls -l /var/log/webapp.log
 
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
