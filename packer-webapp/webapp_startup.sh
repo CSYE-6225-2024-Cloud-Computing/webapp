@@ -13,6 +13,7 @@ sudo mkdir -p /home/csye6225/webapp
 # Create the log directory and file path
 sudo mkdir -p /var/log
 sudo touch /var/log/webapp.log
+sudo chmod -R g+w /var/log
 
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
