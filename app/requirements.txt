@@ -8,3 +8,4 @@ SQLAlchemy
 uvicorn
 passlib
 httpx
+python-json-logger
