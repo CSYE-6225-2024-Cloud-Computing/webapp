@@ -53,6 +53,11 @@ jobs:
           pip install httpx
           pip install python-json-logger
 
+      - name: Create webapp.log file and grant write permissions
+        run: |
+          sudo touch /var/log/webapp.log
+          sudo chmod 777 /var/log/webapp.log
+          
       - name: Run Tests
         env:
           POSTGRES_DATABASE_URL: 'postgresql://${{ secrets.PG_USER }}:${{ secrets.PG_PASSWORD }}@localhost:5432/sjdatabase'
