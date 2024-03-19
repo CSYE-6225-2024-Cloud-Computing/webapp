@@ -11,9 +11,8 @@ sudo dnf install -y unzip
 sudo mkdir -p /home/csye6225/webapp
 
 # Create the log directory and file path
-sudo mkdir -p /var/log
 sudo touch /var/log/webapp.log
-sudo chown root:root /var/log/webapp.log
+sudo chown csye6225:csye6225 /var/log/webapp.log
 # Grant write permission to user
 sudo chmod u+w /var/log/webapp.log
 ls -l /var/log/webapp.log
