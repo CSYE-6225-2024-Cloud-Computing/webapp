@@ -19,7 +19,7 @@ variable "source_image_family" {
 
 variable "zone" {
   type    = string
-  default = "us-central1-a"
+  default = "us-central1-f"
 }
 variable "disk_size" {
   type    = string
