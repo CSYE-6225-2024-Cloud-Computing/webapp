@@ -4,6 +4,19 @@ from .. import schemas, database, models, hashing, validation
 from fastapi.security import HTTPBasicCredentials, HTTPBasic
 from datetime import datetime
 from fastapi.responses import JSONResponse
+import logging
+from pythonjsonlogger import jsonlogger
+
+# Initialize logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create JSON handler with log file path
+log_file_path = '/var/log/webapp.log'  # Specify the log file path here
+logHandler = logging.FileHandler(log_file_path)
+formatter = jsonlogger.JsonFormatter()
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
 
 security = HTTPBasic()
 
@@ -22,12 +35,14 @@ router = APIRouter(
 def verify_credentials(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(database.get_db)):
     user = db.query(models.User).filter(models.User.username == credentials.username).first()
     if not user or not hashing.Hash.verify(user.password, credentials.password):
+        logger.error("Invalid credentials provided")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     return user
 
 # GET - Retrieve user information
 @router.get('/self', status_code=status.HTTP_200_OK, response_model=schemas.showUser)
 def get_user_info(user: schemas.User = Depends(verify_credentials)):
+    logger.info("User information retrieved successfully")
     return user
 
 # PUT - Update user information
@@ -35,24 +50,29 @@ def get_user_info(user: schemas.User = Depends(verify_credentials)):
 async def update_user_info(request: Request, user: schemas.User = Depends(verify_credentials), db: Session = Depends(database.get_db)):
     allowed_fields = {'first_name', 'last_name', 'password'}
     fields_to_update = await request.json()
+    logger.debug({"message": "Fields to update", "data": fields_to_update})
 
     # Check if the prefix matches
     if not request.url.path.startswith('/v1/user/self'):
         print("not found")
+        logger.error("Endpoint not found")
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": "Endpoint not found"}, headers=headers)
 
 
     # Validate if the provided fields are allowed
     if not set(fields_to_update.keys()).issubset(allowed_fields):
+        logger.error("Invalid fields provided for update")
         error_message = {"detail": "Only first_name, last_name, and password can be updated"}
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message,headers=headers)
     
     if not validation.validateNames(fields_to_update["first_name"],fields_to_update["last_name"]):
+        logger.error("Invalid names provided for update")
         error_message = {"detail": "Name must contain only alphabetic characters"}
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message, headers=headers)
 
     errors = validation.validatePassword(fields_to_update["password"])
     if len(errors)!=0:
+        logger.error("Invalid password provided for update")
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": errors}, headers=headers)
 
     # Update fields
@@ -65,6 +85,8 @@ async def update_user_info(request: Request, user: schemas.User = Depends(verify
     # Commit changes to the database
     db.commit()
     db.refresh(user)
+
+    logger.info("User information updated successfully")
     
 
    # Return JSONResponse with headers and no content

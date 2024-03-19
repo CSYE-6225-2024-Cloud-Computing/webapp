@@ -1,11 +1,26 @@
 import os
 import sys
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from fastapi import FastAPI, Request, Response, HTTPException
+from pythonjsonlogger import jsonlogger
 
 
+# Initialize logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create file handler
+log_file_path = '/var/log/webapp.log'  # File path from config.yaml
+file_handler = logging.FileHandler(log_file_path)
+formatter = jsonlogger.JsonFormatter()
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+
+# Declare database engine
 def create_database_engine():
     database_url = os.getenv('POSTGRES_DATABASE_URL', '')
     if database_url:
@@ -14,7 +29,7 @@ def create_database_engine():
             # Test the connection
             engine.connect()
             print("\n=====================================================================")
-            print(f"POSTGRES DB Connected Successfuly")
+            logger.info(f"POSTGRES DB Connected Successfuly")
             print("\n=====================================================================")
 
             return engine
@@ -22,14 +37,17 @@ def create_database_engine():
         except Exception as e:
             #return Response(status_code=503)
             print("\n=====================================================================")
-            print("Error connecting to the PostgreSQL database:")
+            logger.error("Error connecting to the PostgreSQL database:")
             print("\n=====================================================================")
             #raise e
     else:
         print("\n=====================================================================")
-        print(f"Cannot find Connection to Postgres Database")
+        logger.error(f"Cannot find Connection to Postgres Database")
         print("\n=====================================================================")
         sys.exit()
+
+# Additional log for database connection setup completion
+logger.info("Database connection setup completed successfully")
 
         # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
         # try:

@@ -10,6 +10,10 @@ sudo dnf install -y unzip
 # Create the target directory if it doesn't exist
 sudo mkdir -p /home/csye6225/webapp
 
+# Create the log directory and file path
+sudo mkdir -p /var/log
+sudo touch /var/log/webapp.log
+
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
 
@@ -42,6 +46,16 @@ echo '==========================================================================
 echo 'Requirements.txt installations completed.'
 echo '================================================================================================================================================'
 
+# Copy the Ops Agent configuration file to the correct location
+sudo cp /home/csye6225/webapp/config.yaml /etc/google-cloud-ops-agent/config.yaml
+sudo chown csye6225:csye6225 /etc/google-cloud-ops-agent/config.yaml
+sudo chmod 550 /etc/google-cloud-ops-agent/config.yaml
+
+echo '================================================================================================================================================'
+echo 'google-cloud-ops-agent/config.yaml file copied'
+echo '================================================================================================================================================'
+
+
 # Give ownership permission to csye6225
 sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
 # TODO: add 755 permission to the app dir with R flag
@@ -58,10 +72,15 @@ sudo systemctl enable webapp.service
 
 # Start the webapp.service
 sudo systemctl start webapp.service
+echo '================================================================================================================================================'
+echo 'Webapp service started'
+echo '================================================================================================================================================'
+
+# Restart the Ops Agent service to apply the changes
+sudo systemctl restart google-cloud-ops-agent
 
 echo '================================================================================================================================================'
-echo 'Ownership of the application directory set to the dedicated user - csye6225'
-echo '================================================================================================================================================'
+echo 'Google Cloud Ops Agent service restarted'
 echo '================================================================================================================================================'
 echo 'Custom image setup completed'
 echo '================================================================================================================================================'

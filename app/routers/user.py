@@ -6,7 +6,20 @@ from passlib.context import CryptContext
 from fastapi.responses import JSONResponse
 import json
 from pydantic import ValidationError
+import logging
+from pythonjsonlogger import jsonlogger
 
+
+# Initialize logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create JSON handler with log file path
+log_file_path = '/var/log/webapp.log'  # Specify the log file path here
+logHandler = logging.FileHandler(log_file_path)
+formatter = jsonlogger.JsonFormatter()
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
 
 headers = {
     "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -31,9 +44,13 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         # Parse the request body
         data = await request.json()
 
+        # Log the incoming request data
+        logger.info("Received request to create user", extra={"request_data": data})
+
+
         # Check if the prefix matches
         if not request.url.path.startswith('/v1/user'):
-            print("not found")
+            logger.warning("Endpoint not found")
             return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": "Endpoint not found"}, headers=headers)
 
         # Check if all required parameters are present
@@ -41,6 +58,7 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         for param in required_params:
             if param not in data:
                 error_message = {"detail": f"Parameter {param} is missing"}
+                logger.error(error_message)
                 return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message, headers=headers)
             
         # Check if there are any extra parameters in the request
@@ -49,6 +67,7 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         if not request_params.issubset(allowed_params):
             extra_params = request_params - allowed_params
             error_message = {"detail": f"Extra parameters in request: {', '.join([f'{param}' for param in extra_params])} not allowed"}
+            logger.error(error_message)
             return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message)
 
         
@@ -57,15 +76,17 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         
         if not validation.validateEmail(data["username"]):
             error_message = {"detail": f"Invalid email format"}
+            logger.error(error_message)
             return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,content=error_message,headers=headers)
         
         if not validation.validateNames(data["first_name"],data["last_name"]):
             error_message = {"detail": "Name must contain only alphabetic characters"}
+            logger.error(error_message)
             return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=error_message, headers=headers)
         
         errors = validation.validatePassword(data["password"])
-        print(errors)
         if len(errors)!=0:
+            logger.error(errors)
             return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": errors}, headers=headers)
 
         # Check if the username already exists
@@ -87,11 +108,14 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         db.commit()
         db.refresh(new_user)
 
+        logger.info("User created successfully")
         return new_user
 
     except Exception as e:
+        # Log the error
+        logger.error("An error occurred while processing the request", exc_info=True)
         # Log the error if needed
-        print("Error:", str(e))
+        #print("Error:", str(e))
         # Raise a generic 400 Bad Request error
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": "Bad Request"},headers=headers)
 

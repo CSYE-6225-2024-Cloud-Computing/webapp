@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Response, Request
+import logging
+from pythonjsonlogger import jsonlogger
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -7,13 +9,29 @@ import os
 from .database import engine
 from .routers import user, authenticated, healthz
 
+
+# Initialize logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create JSON handler with log file path
+log_file_path = '/var/log/webapp.log'  # Specify the log file path here
+logHandler = logging.FileHandler(log_file_path)
+formatter = jsonlogger.JsonFormatter()
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
+
+log_file_path = "/var/log/webapp.log"
+
 #testing-01
 models.Base.metadata.create_all(engine)
-print("Database created successfully")
+logger.info("Database created successfully")
+#print("Database created successfully")
 
 app = FastAPI()
 
 print("============================== ROUTER: user.py================================")
+logger.info("Including user router")
 app.include_router(user.router)
 
 
@@ -22,6 +40,7 @@ app.include_router(authenticated.router)
 
 
 print("============================== ROUTER: healthz.py================================")
+logger.info("Including healthz router")
 app.include_router(healthz.router)
 
 
