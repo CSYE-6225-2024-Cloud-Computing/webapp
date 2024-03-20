@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Create file handler
-log_file_path = '/tmp/webapp.log'  # File path from config.yaml
+log_file_path = './webapp.log'  # File path from config.yaml
 file_handler = logging.FileHandler(log_file_path)
 formatter = jsonlogger.JsonFormatter()
 file_handler.setFormatter(formatter)
