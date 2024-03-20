@@ -11,10 +11,11 @@ sudo dnf install -y unzip
 sudo mkdir -p /home/csye6225/webapp
 
 # Create the log directory and file path
-sudo touch /var/log/webapp.log
-sudo chown csye6225:csye6225 /var/log/webapp.log
+sudo touch /tmp/webapp.log
+sudo chown csye6225:csye6225 /tmp/webapp.log
 # Grant write permission to user
-sudo chmod u+w /var/log/webapp.log
+#sudo chmod u+w /tmp/webapp.log
+sudo chmod 755 /tmp/webapp.log
 
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
