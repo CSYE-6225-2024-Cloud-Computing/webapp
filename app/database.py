@@ -15,7 +15,7 @@ logger.setLevel(logging.INFO)
 # Create file handler
 log_file_path = './webapp.log'  # File path from config.yaml
 file_handler = logging.FileHandler(log_file_path)
-formatter = jsonlogger.JsonFormatter('(asctime) (levelname) (message) (filename) (lineno)')
+formatter = jsonlogger.JsonFormatter('%(asctime)s %(levelname)s %(message)s %(filename)s %(lineno)d')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
