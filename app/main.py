@@ -6,24 +6,17 @@ load_dotenv()
 
 from . import models
 import os
+import sys
 from .database import engine
 from .routers import user, authenticated, healthz
+from . import validation
 
 
-# Initialize logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+# Get the root logger instance
+logger = logging.getLogger()
+validation.configure_logging(logger)
 
 
-# Create file handler
-log_file_path = './webapp.log'  # File path from config.yaml
-file_handler = logging.FileHandler(log_file_path)
-formatter = jsonlogger.JsonFormatter('%(asctime)s %(levelname)s %(message)s %(filename)s %(lineno)d')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-
-# Add custom log attribute
-file_handler.addFilter(lambda record: setattr(record, 'log_name', 'my_logs_app'))
 
 #testing-01
 models.Base.metadata.create_all(engine)
