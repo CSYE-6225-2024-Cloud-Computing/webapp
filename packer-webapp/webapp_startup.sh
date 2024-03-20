@@ -11,11 +11,11 @@ sudo dnf install -y unzip
 sudo mkdir -p /home/csye6225/webapp
 
 # Create the log directory and file path
-sudo touch /var/log/webapp.log
-sudo chown csye6225:csye6225 /var/log/webapp.log
-# Grant write permission to user
-#sudo chmod u+w /var/log/webapp.log
-sudo chmod 764 /var/log/webapp.log
+# sudo touch /var/log/webapp.log
+# sudo chown csye6225:csye6225 /var/log/webapp.log
+# # Grant write permission to user
+# #sudo chmod u+w /var/log/webapp.log
+# sudo chmod 764 /var/log/webapp.log
 
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
@@ -33,6 +33,12 @@ sudo /home/csye6225/webapp/packer-webapp/userInstall.sh
 sudo cp /home/csye6225/webapp/service/webapp.service /etc/systemd/system/webapp.service
 sudo chown csye6225:csye6225 /etc/systemd/system/webapp.service
 sudo chmod 550 /etc/systemd/system/webapp.service
+
+# Create the log directory and file path
+sudo touch /var/log/webapp.log
+sudo chown csye6225:csye6225 /var/log/webapp.log
+# Grant write permission to user
+sudo chmod 764 /var/log/webapp.log
 
 # Database Installation
 # sudo chmod +x /home/csye6225/webapp/packer-webapp/databaseInstall.sh
