@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Create JSON handler with log file path
-log_file_path = '/var/log/webapp.log'  # Specify the log file path here
+log_file_path = '/tmp/webapp.log'  # Specify the log file path here
 logHandler = logging.FileHandler(log_file_path)
 formatter = jsonlogger.JsonFormatter()
 logHandler.setFormatter(formatter)
