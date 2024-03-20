@@ -6,22 +6,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from fastapi import FastAPI, Request, Response, HTTPException
 from pythonjsonlogger import jsonlogger
+from . import validation
 
 
-# Initialize logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
-# Create file handler
-log_file_path = './webapp.log'  # File path from config.yaml
-file_handler = logging.FileHandler(log_file_path)
-formatter = jsonlogger.JsonFormatter('%(asctime)s %(levelname)s %(message)s %(filename)s %(lineno)d')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
 
-# Add custom log attribute
-file_handler.addFilter(lambda record: setattr(record, 'log_name', 'my_logs_app'))
-
+# Get the root logger instance
+logger = logging.getLogger()
+validation.configure_logging(logger)
 
 
 

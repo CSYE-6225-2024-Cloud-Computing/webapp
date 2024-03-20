@@ -4,19 +4,14 @@ from .. import schemas, database, models, hashing, validation
 from fastapi.security import HTTPBasicCredentials, HTTPBasic
 from datetime import datetime
 from fastapi.responses import JSONResponse
-import logging
+import logging, sys
 from pythonjsonlogger import jsonlogger
 
-# Initialize logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
-# Create JSON handler with log file path
-log_file_path = './webapp.log'  # Specify the log file path here
-logHandler = logging.FileHandler(log_file_path)
-formatter = jsonlogger.JsonFormatter()
-logHandler.setFormatter(formatter)
-logger.addHandler(logHandler)
+
+# Get the root logger instance
+logger = logging.getLogger()
+validation.configure_logging(logger)
 
 security = HTTPBasic()
 

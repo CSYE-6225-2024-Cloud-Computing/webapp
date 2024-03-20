@@ -11,11 +11,11 @@ sudo dnf install -y unzip
 sudo mkdir -p /home/csye6225/webapp
 
 # Create the log directory and file path
-# sudo touch /tmp/webapp.log
-# sudo chown csye6225:csye6225 /tmp/webapp.log
+sudo touch /var/log/webapp.log
+sudo chown csye6225:csye6225 /var/log/webapp.log
 # Grant write permission to user
-#sudo chmod u+w /tmp/webapp.log
-# sudo chmod 755 /tmp/webapp.log
+#sudo chmod u+w /var/log/webapp.log
+sudo chmod 764 /var/log/webapp.log
 
 # Install application dependencies and copy artifacts and configuration files
 sudo unzip /tmp/webapp.zip -d /home/csye6225/webapp
@@ -50,7 +50,7 @@ echo 'Requirements.txt installations completed.'
 echo '================================================================================================================================================'
 
 # Copy the Ops Agent configuration file to the correct location
-sudo cp /home/csye6225/webapp/config.yaml /etc/google-cloud-ops-agent/config.yaml
+sudo cp /home/csye6225/webapp/app/config.yaml /etc/google-cloud-ops-agent/config.yaml
 # sudo chown csye6225:csye6225 /etc/google-cloud-ops-agent/config.yaml
 # sudo chmod 550 /etc/google-cloud-ops-agent/config.yaml
 
