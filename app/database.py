@@ -15,9 +15,14 @@ logger.setLevel(logging.INFO)
 # Create file handler
 log_file_path = './webapp.log'  # File path from config.yaml
 file_handler = logging.FileHandler(log_file_path)
-formatter = jsonlogger.JsonFormatter()
+formatter = jsonlogger.JsonFormatter('(asctime) (levelname) (message) (filename) (lineno)')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
+
+# Add custom log attribute
+file_handler.addFilter(lambda record: setattr(record, 'log_name', 'my_logs_app'))
+
+
 
 
 # Declare database engine
