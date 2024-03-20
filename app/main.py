@@ -15,13 +15,11 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Create JSON handler with log file path
-log_file_path = '/tmp/webapp.log'  # Specify the log file path here
+log_file_path = './webapp.log'  # Specify the log file path here
 logHandler = logging.FileHandler(log_file_path)
 formatter = jsonlogger.JsonFormatter()
 logHandler.setFormatter(formatter)
 logger.addHandler(logHandler)
-
-log_file_path = "/var/log/webapp.log"
 
 #testing-01
 models.Base.metadata.create_all(engine)
