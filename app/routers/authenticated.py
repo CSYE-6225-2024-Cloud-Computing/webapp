@@ -11,7 +11,7 @@ from pythonjsonlogger import jsonlogger
 
 # Get the root logger instance
 logger = logging.getLogger()
-validation.configure_logging(logger)
+# validation.configure_logging(logger)
 
 security = HTTPBasic()
 

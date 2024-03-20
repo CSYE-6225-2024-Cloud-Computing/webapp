@@ -8,7 +8,7 @@ from . import validation
 
 # Get the root logger instance
 logger = logging.getLogger()
-validation.configure_logging(logger)
+# validation.configure_logging(logger)
 
 pwd_cxt = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
