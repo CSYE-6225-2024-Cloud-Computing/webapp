@@ -118,6 +118,10 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         message = json.dumps(jsonable_encoder(new_user))
         message_bytes = message.encode("utf-8")
         future = publisher.publish(topic_path, data=message_bytes)
+        print(future)
+        logger(future)
+        result = future.result()  # This will block until the operation is complete
+        print(result)
         return new_user
 
     except Exception as e:
