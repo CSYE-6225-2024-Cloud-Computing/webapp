@@ -9,3 +9,5 @@ uvicorn
 passlib
 httpx
 python-json-logger
+google-cloud-secret-manager
+google-cloud-pubsub

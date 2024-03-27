@@ -62,6 +62,8 @@ def configure_logging(logger):
 
     # Configure a FileHandler to output logs to a file named 'webapp.log'
     file_handler = logging.FileHandler('/var/log/webapp.log')
+    # file_handler = logging.FileHandler('./webapp.log')
+
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
