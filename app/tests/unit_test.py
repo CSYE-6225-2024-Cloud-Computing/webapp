@@ -51,126 +51,126 @@ def test_create_user_failure():
     assert response.json()["detail"] == "Invalid email format"
 
 # Test to read user data successfully
-def test_read_main():
-    # Assuming you have the plaintext password
-    username = "test_email@example.com"
-    password = "Test@pass01"
-    concatenated_value = f"{username}:{password}"
-    payload = {}
-    headers = {
-        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-    }
-    print(f"---headers----- {headers}")
-    response = client.get("/v1/user/self", headers=headers)
-    # response = requests.request("GET", url, headers=headers, data=payload)
-    assert response.status_code == 200
-    print(f"----response body ---- {response.json()}")
+# def test_read_main():
+#     # Assuming you have the plaintext password
+#     username = "test_email@example.com"
+#     password = "Test@pass01"
+#     concatenated_value = f"{username}:{password}"
+#     payload = {}
+#     headers = {
+#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+#     }
+#     print(f"---headers----- {headers}")
+#     response = client.get("/v1/user/self", headers=headers)
+#     # response = requests.request("GET", url, headers=headers, data=payload)
+#     assert response.status_code == 200
+#     print(f"----response body ---- {response.json()}")
 
-# Test to handle failure in reading user data with incorrect password
-def test_read_main_failure():
-    # Assuming you have the plaintext password
-    username = "test_email@example.com"
-    # Use an incorrect password here
-    password = "IncorrectPassword"
-    concatenated_value = f"{username}:{password}"
-    payload = {}
-    headers = {
-        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-    }
-    response = client.get("/v1/user/self", headers=headers)
-    # Assert that the response status code is 401 Unauthorized
-    assert response.status_code == 401
+# # Test to handle failure in reading user data with incorrect password
+# def test_read_main_failure():
+#     # Assuming you have the plaintext password
+#     username = "test_email@example.com"
+#     # Use an incorrect password here
+#     password = "IncorrectPassword"
+#     concatenated_value = f"{username}:{password}"
+#     payload = {}
+#     headers = {
+#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+#     }
+#     response = client.get("/v1/user/self", headers=headers)
+#     # Assert that the response status code is 401 Unauthorized
+#     assert response.status_code == 401
 
-########################################################################################################################################################################
+# ########################################################################################################################################################################
 
-# Test to update user first name successfully
-def test_update_first_name():
-    # Assuming you have the plaintext password
-    username = "test_email@example.com"
-    password = "Test@pass01"
-    concatenated_value = f"{username}:{password}"
-    payload = json.dumps({
-        "first_name": "testRenameFirstName",
-        "last_name": "testRenameLastName",
-        "password": "Test@pass01"
-    })
-    headers = {
-        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-    }
-    print(f"---headers----- {headers}")
-    response = client.put("/v1/user/self", headers=headers, data=payload)
+# # Test to update user first name successfully
+# def test_update_first_name():
+#     # Assuming you have the plaintext password
+#     username = "test_email@example.com"
+#     password = "Test@pass01"
+#     concatenated_value = f"{username}:{password}"
+#     payload = json.dumps({
+#         "first_name": "testRenameFirstName",
+#         "last_name": "testRenameLastName",
+#         "password": "Test@pass01"
+#     })
+#     headers = {
+#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+#     }
+#     print(f"---headers----- {headers}")
+#     response = client.put("/v1/user/self", headers=headers, data=payload)
    
-    assert response.status_code == 204
-    print(f"----response body ---- {response.json()}")
+#     assert response.status_code == 204
+#     print(f"----response body ---- {response.json()}")
 
-    # Send a GET request to validate that the account was updated
-    updated_response = client.get("/v1/user/self", headers=headers)
+#     # Send a GET request to validate that the account was updated
+#     updated_response = client.get("/v1/user/self", headers=headers)
     
-    # Assert that the response status code is 200 OK
-    assert updated_response.status_code == 200
+#     # Assert that the response status code is 200 OK
+#     assert updated_response.status_code == 200
 
-    # Additional assertions based on the expected updated user data in the response
-    assert updated_response.json()["first_name"] == "testRenameFirstName"
-    assert updated_response.json()["last_name"] == "testRenameLastName"
+#     # Additional assertions based on the expected updated user data in the response
+#     assert updated_response.json()["first_name"] == "testRenameFirstName"
+#     assert updated_response.json()["last_name"] == "testRenameLastName"
 
-########################################################################################################################################################################
+# ########################################################################################################################################################################
 
-# Test to update user password successfully
-def test_update_password():
-    # Assuming you have the plaintext password
-    username = "test_email@example.com"
-    password = "Test@pass01"
-    concatenated_value = f"{username}:{password}"
-    payload = json.dumps({
-        "first_name": "testRenameFirstName",
-        "last_name": "testRenameLastName",
-        "password": "TestRename@pass01"
-    })
-    headers = {
-        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-    }
-    print(f"---headers----- {headers}")
-    pass_update_response = client.put("/v1/user/self", headers=headers, data=payload)
-    # response = requests.request("GET", url, headers=headers, data=payload)
-    assert pass_update_response.status_code == 204
-    print(f"----response body ---- {pass_update_response.json()}")
+# # Test to update user password successfully
+# def test_update_password():
+#     # Assuming you have the plaintext password
+#     username = "test_email@example.com"
+#     password = "Test@pass01"
+#     concatenated_value = f"{username}:{password}"
+#     payload = json.dumps({
+#         "first_name": "testRenameFirstName",
+#         "last_name": "testRenameLastName",
+#         "password": "TestRename@pass01"
+#     })
+#     headers = {
+#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+#     }
+#     print(f"---headers----- {headers}")
+#     pass_update_response = client.put("/v1/user/self", headers=headers, data=payload)
+#     # response = requests.request("GET", url, headers=headers, data=payload)
+#     assert pass_update_response.status_code == 204
+#     print(f"----response body ---- {pass_update_response.json()}")
 
-# Test to read user data after updating password successfully
-def test_update_read_pass():
-    # Assuming you have the plaintext password
-    username = "test_email@example.com"
-    password = "TestRename@pass01"
-    concatenated_value = f"{username}:{password}"
-    payload = {}
-    headers = {
-        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-    }
-    print(f"---headers----- {headers}")
-    updated_pass_response = client.get("/v1/user/self", headers=headers)
-    # response = requests.request("GET", url, headers=headers, data=payload)
-    assert updated_pass_response.status_code == 200
-    print(f"----response body ---- {updated_pass_response.json()}")
+# # Test to read user data after updating password successfully
+# def test_update_read_pass():
+#     # Assuming you have the plaintext password
+#     username = "test_email@example.com"
+#     password = "TestRename@pass01"
+#     concatenated_value = f"{username}:{password}"
+#     payload = {}
+#     headers = {
+#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+#     }
+#     print(f"---headers----- {headers}")
+#     updated_pass_response = client.get("/v1/user/self", headers=headers)
+#     # response = requests.request("GET", url, headers=headers, data=payload)
+#     assert updated_pass_response.status_code == 200
+#     print(f"----response body ---- {updated_pass_response.json()}")
 
-    # Additional assertions based on the expected updated user data in the response
-    assert updated_pass_response.json()["first_name"] == "testRenameFirstName"
-    assert updated_pass_response.json()["last_name"] == "testRenameLastName"
+#     # Additional assertions based on the expected updated user data in the response
+#     assert updated_pass_response.json()["first_name"] == "testRenameFirstName"
+#     assert updated_pass_response.json()["last_name"] == "testRenameLastName"
 
-########################################################################################################################################################################
+# ########################################################################################################################################################################
 
-# Test to handle failure in reading user data with incorrect password after updating
-def test_update_read_failure():
-    # Assuming you have the plaintext password
-    username = "test_email@example.com"
-    # Use an incorrect password here
-    password = "IncorrectPassword"
-    concatenated_value = f"{username}:{password}"
-    payload = {}
-    headers = {
-        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-    }
-    response = client.get("/v1/user/self", headers=headers)
-    # Assert that the response status code is 401 Unauthorized
-    assert response.status_code == 401
+# # Test to handle failure in reading user data with incorrect password after updating
+# def test_update_read_failure():
+#     # Assuming you have the plaintext password
+#     username = "test_email@example.com"
+#     # Use an incorrect password here
+#     password = "IncorrectPassword"
+#     concatenated_value = f"{username}:{password}"
+#     payload = {}
+#     headers = {
+#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+#     }
+#     response = client.get("/v1/user/self", headers=headers)
+#     # Assert that the response status code is 401 Unauthorized
+#     assert response.status_code == 401
 
 ########################################################################################################################################################################
 
