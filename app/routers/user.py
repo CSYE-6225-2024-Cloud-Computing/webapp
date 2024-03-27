@@ -11,6 +11,7 @@ from pythonjsonlogger import jsonlogger
 from datetime import datetime, timedelta
 from google.cloud import pubsub_v1
 import os
+from fastapi.encoders import jsonable_encoder
 
 # Get the root logger instance
 logger = logging.getLogger()
@@ -113,7 +114,9 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
                                             os.getenv('GCP_PROJECT_ID', ''), 
                                             os.getenv('PUBSUB_TOPIC_NAME', 'verify_email')
                                         )
-        message_bytes = new_user.encode("utf-8")
+        # Convert the payload to JSON string
+        message = json.dumps(jsonable_encoder(new_user))
+        message_bytes = message.encode("utf-8")
         future = publisher.publish(topic_path, data=message_bytes)
         return new_user
 
