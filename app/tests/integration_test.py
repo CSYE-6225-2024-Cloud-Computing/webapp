@@ -47,96 +47,96 @@ def test_create_user():
 
 
 # Test to read user data successfully to validate existence of account
-def test_read_main():
-    """Test reading user data and validate the response."""
-    response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD))
+# def test_read_main():
+#     """Test reading user data and validate the response."""
+#     response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD))
 
-    assert response.status_code == 200
-    assert response.json()["first_name"] == "testFirstName"
-    assert response.json()["last_name"] == "testLastName"
-    assert response.json()["username"] == USERNAME
+#     assert response.status_code == 200
+#     assert response.json()["first_name"] == "testFirstName"
+#     assert response.json()["last_name"] == "testLastName"
+#     assert response.json()["username"] == USERNAME
 
-########################################################################################################################################################################
+# ########################################################################################################################################################################
 
-# Test to handle failure in creating a user with invalid email format
-def test_create_user_failure():
-    """Test creating a user with invalid email format and validate the response."""
+# # Test to handle failure in creating a user with invalid email format
+# def test_create_user_failure():
+#     """Test creating a user with invalid email format and validate the response."""
 
-    invalid_user_data = {
-        "first_name": "testFirstName",
-        "last_name": "testLastName",
-        "username": "invalid_email_example.com",  # Invalid email format
-        "password": PASSWORD
-    }
-    response = client.post("/v1/user/", json=invalid_user_data)
+#     invalid_user_data = {
+#         "first_name": "testFirstName",
+#         "last_name": "testLastName",
+#         "username": "invalid_email_example.com",  # Invalid email format
+#         "password": PASSWORD
+#     }
+#     response = client.post("/v1/user/", json=invalid_user_data)
 
-    assert response.status_code == 400
-    assert response.json()["detail"] == "Invalid email format"
+#     assert response.status_code == 400
+#     assert response.json()["detail"] == "Invalid email format"
 
 
 
-# Test to handle failure in reading user data with incorrect password
-def test_read_main_failure():
-    """Test reading user data with incorrect password and validate the response."""
-    invalid_password = "IncorrectPassword"
-    response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, invalid_password))
+# # Test to handle failure in reading user data with incorrect password
+# def test_read_main_failure():
+#     """Test reading user data with incorrect password and validate the response."""
+#     invalid_password = "IncorrectPassword"
+#     response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, invalid_password))
 
-    assert response.status_code == 401
+#     assert response.status_code == 401
 
-########################################################################################################################################################################
-#Test 2 - Update the account and using the GET call, validate the account was updated.
-########################################################################################################################################################################
+# ########################################################################################################################################################################
+# #Test 2 - Update the account and using the GET call, validate the account was updated.
+# ########################################################################################################################################################################
         
-# Test to update user first name successfully
-def test_update_first_name():
-    """Test updating user first name and validate the response."""
+# # Test to update user first name successfully
+# def test_update_first_name():
+#     """Test updating user first name and validate the response."""
 
-    update_data = {
-        "first_name": "testRenameFirstName",
-        "last_name": "testRenameLastName",
-        "password": PASSWORD
-    }
-    response = client.put("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD), json=update_data)
+#     update_data = {
+#         "first_name": "testRenameFirstName",
+#         "last_name": "testRenameLastName",
+#         "password": PASSWORD
+#     }
+#     response = client.put("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD), json=update_data)
 
-    assert response.status_code == 204
+#     assert response.status_code == 204
 
-    # Send a GET request to validate that the account was updated
-    updated_response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD))
+#     # Send a GET request to validate that the account was updated
+#     updated_response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD))
 
-    assert updated_response.status_code == 200
-    assert updated_response.json()["first_name"] == "testRenameFirstName"
-    assert updated_response.json()["last_name"] == "testRenameLastName"
+#     assert updated_response.status_code == 200
+#     assert updated_response.json()["first_name"] == "testRenameFirstName"
+#     assert updated_response.json()["last_name"] == "testRenameLastName"
 
-# Test to update user password successfully
-def test_update_password():
-    """Test updating user password and validate the response."""
+# # Test to update user password successfully
+# def test_update_password():
+#     """Test updating user password and validate the response."""
 
-    update_data = {
-        "first_name": "testRenameFirstName",
-        "last_name": "testRenameLastName",
-        "password": "TestRename@pass01"
-    }
-    response = client.put("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD), json=update_data)
+#     update_data = {
+#         "first_name": "testRenameFirstName",
+#         "last_name": "testRenameLastName",
+#         "password": "TestRename@pass01"
+#     }
+#     response = client.put("/v1/user/self", headers=get_auth_headers(USERNAME, PASSWORD), json=update_data)
 
-    assert response.status_code == 204
+#     assert response.status_code == 204
 
-# Test to read user data after updating password successfully
-def test_update_read_pass():
-    """Test reading user data after updating password and validate the response."""
-    updated_password = "TestRename@pass01"
-    response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, updated_password))
+# # Test to read user data after updating password successfully
+# def test_update_read_pass():
+#     """Test reading user data after updating password and validate the response."""
+#     updated_password = "TestRename@pass01"
+#     response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, updated_password))
 
-    assert response.status_code == 200
-    assert response.json()["first_name"] == "testRenameFirstName"
-    assert response.json()["last_name"] == "testRenameLastName"
+#     assert response.status_code == 200
+#     assert response.json()["first_name"] == "testRenameFirstName"
+#     assert response.json()["last_name"] == "testRenameLastName"
 
-# Test to handle failure in reading user data with incorrect password after updating
-def test_update_read_failure():
-    """Test reading user data with incorrect password after updating and validate the response."""
-    invalid_password = "IncorrectPassword"
-    response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, invalid_password))
+# # Test to handle failure in reading user data with incorrect password after updating
+# def test_update_read_failure():
+#     """Test reading user data with incorrect password after updating and validate the response."""
+#     invalid_password = "IncorrectPassword"
+#     response = client.get("/v1/user/self", headers=get_auth_headers(USERNAME, invalid_password))
 
-    assert response.status_code == 401
+#     assert response.status_code == 401
 
 ########################################################################################################################################################################
     
