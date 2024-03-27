@@ -28,5 +28,5 @@ class Logs(Base):
     username = Column(String)
     email_sent_status = Column(String)  # Indicates if SendGrid sent the email for verification
     current_timestamp = Column(DateTime, default=datetime.now)
-    expires_timestamp = Column(DateTime, default=lambda: datetime.now() + timedelta(minutes=20))
+    expires_timestamp = Column(DateTime, default=lambda: datetime.now + timedelta(minutes=20))
     
