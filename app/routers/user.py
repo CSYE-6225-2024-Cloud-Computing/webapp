@@ -8,8 +8,9 @@ import json
 from pydantic import ValidationError
 import logging, sys
 from pythonjsonlogger import jsonlogger
-
-
+from datetime import datetime, timedelta
+from google.cloud import pubsub_v1
+import os
 
 # Get the root logger instance
 logger = logging.getLogger()
@@ -105,6 +106,15 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         db.refresh(new_user)
 
         logger.info("User created successfully")
+
+        ## Add pubsub message
+        publisher = pubsub_v1.PublisherClient()
+        topic_path = publisher.topic_path(
+                                            os.getenv('GCP_PROJECT_ID', ''), 
+                                            os.getenv('PUBSUB_TOPIC_NAME', 'verify_email')
+                                        )
+        message_bytes = new_user.encode("utf-8")
+        future = publisher.publish(topic_path, data=message_bytes)
         return new_user
 
     except Exception as e:
@@ -117,39 +127,75 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
 
 
 
-    # try:
-    #     print("---inside CREATE USER=========")
-    #     #user_data = request.dict()
-    #     print(request.json())
-    #     print("---inside CREATE USER=========")
-    #     #schemas.userCreate(**user_data)
+@router.get('/verify_email', status_code=status.HTTP_200_OK, response_description="User verification", response_model=schemas.showUser)
+async def verify_email(token_id: str, request: Request, db: Session = Depends(database.get_db)):
+    try:
+        # Assuming you have a User model with a field 'account_created' representing the account creation timestamp
+        logs = db.query(models.Logs).filter(models.Logs.token_id == token_id).first()
 
-    # except schemas.ValidationError as e:
-    #     # Construct a detailed error message for logging purposes
-    #     error_details = [{'type': error.type, 'loc': error.loc, 'msg': error.msg, 'input': error.input} for error in e.errors()]
-    #     # Log the error details if needed
-    #     print("Validation errors:", error_details)
-    #     # Return a 400 Bad Request with the error details
-    #     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+        if not logs:
+            error_message = "Token ID not found"
+            logger.error(error_message)
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_message)
+
+        # Calculate the time difference between current time and account creation time
+        if datetime.now() <= logs.expires_timestamp:
+            user = db.query(models.User).filter(models.User.username == logs.username).first()
+            user.is_verified = True
+            db.commit()
+
+            success_message = f"Email verification successful for user {user.username}"
+            logger.info(success_message)
+            return JSONResponse(status_code=status.HTTP_200_OK, content={"detail": success_message})
+
+        
+            # If the verification is successful, return the user details
+            #return user
+
+        else:
+            error_message = "Account creation time exceeded 2 minutes"
+            logger.error(error_message)
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_message)
+
+    except Exception as e:
+        error_message = f"An error occurred during email verification: {e}"
+        logger.error(error_message)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"detail": error_message})
 
 
-    # existing_user = db.query(models.User).filter(models.User.username == request.username).first()
-    # if existing_user:
-    #     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST , detail=f"email address already exists")
 
-    # #hashedPassword = pwd_cxt.hash(request.password)
-    # new_user = models.User(
-    #     first_name=request.first_name,
-    #     last_name=request.last_name,
-    #     username=request.username,
-    #     password=hashing.Hash.bcrypt(request.password))
+# @router.get('/verify_email', status_code=status.HTTP_201_CREATED, response_description="User created", response_model=schemas.showUser)
+# async def verify_email(token_id: str, request: Request, db: Session = Depends(database.get_db)):
+#     # Assuming you have a User model with a field 'account_created' representing the account creation timestamp
+#     logs = db.query(models.Logs).filter(models.Logs.token_id == token_id).first()
     
-    # #add new user
-    # db.add(new_user)
-    # db.commit()
-    # db.refresh(new_user)
+#     if not logs:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    
+#     # Calculate the time difference between current time and account creation time
+#     if (datetime.now <= logs.expires_timestamp):
+#         user = db.query(models.User).filter(models.User.username == logs.username).first()
+#         user.is_verified == True
+#         db.commit()
 
-    # return new_user
+#     else:
+#         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Account creation time exceeded 2 minutes")
 
-  
+#     return user
+    
 
+# @router.get('/resend_email', status_code=status.HTTP_201_CREATED, response_description="User created", response_model=schemas.showUser)
+# async def resend_email(user_email: str, request: Request, db: Session = Depends(database.get_db)):
+#     # Assuming you have a User model with a field 'account_created' representing the account creation timestamp
+#     user = db.query(models.User).filter(models.User.username == user_email).first()
+#     if not user:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    
+#     # Update the account_created field with the current timestamp
+#     user.account_created = datetime.now()
+#     db.commit()
+    
+#     # If the update is successful, return the user details
+#     return user
+
+    
