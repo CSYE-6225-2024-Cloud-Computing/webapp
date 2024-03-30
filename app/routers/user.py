@@ -119,9 +119,11 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
         message_bytes = message.encode("utf-8")
         future = publisher.publish(topic_path, data=message_bytes)
         print(future)
-        logger(future)
+        logger.info(future)
         result = future.result()  # This will block until the operation is complete
         print(result)
+        logger.info(result)
+        logger.info("Message sent successfully to the Pubsub topic")
         return new_user
 
     except Exception as e:
