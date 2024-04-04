@@ -29,9 +29,12 @@ router = APIRouter(
 
 def verify_credentials(credentials: HTTPBasicCredentials = Depends(security), db: Session = Depends(database.get_db)):
     user = db.query(models.User).filter(models.User.username == credentials.username).first()
-    if not user or not hashing.Hash.verify(user.password, credentials.password) or user.is_verified == False:
+    if not user or not hashing.Hash.verify(user.password, credentials.password):
         logger.error("Invalid credentials provided")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    elif not user.is_verified:
+        logger.error("User is not verified")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User is not verified")
     return user
 
 # GET - Retrieve user information
