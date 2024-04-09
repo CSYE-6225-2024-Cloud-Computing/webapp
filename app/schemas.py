@@ -64,6 +64,7 @@ class showUser(User):
     id: str
     account_created: Optional[datetime] = None
     account_updated: Optional[datetime] = None
+    #is_verified: bool
     class Config():
         orm_mode = True
 
