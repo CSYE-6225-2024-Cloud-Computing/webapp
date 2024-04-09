@@ -12,46 +12,51 @@ import json
 database.clear_database()
 ########################################################################################################################################################################
 
-# Test to create a user successfully
+########################################################################################################################################################################
+#Test 1 - Healthz check
+########################################################################################################################################################################
+
+def test_get_healthz():
+    response = client.get("/healthz/")
+
+    assert response.status_code == 200
+
+
 def test_create_user():
-    # Define test data
-    assert 1 == 1
-#     user_data = {
-#         "first_name": "testFirstName",
-#         "last_name": "testLastName",
-#         "username": "test_email@example.com",
-#         "password": "Test@pass01"
-#     }
+    """Test creating a user and validate the response."""
+    #assert 1 == 1
+    user_data = {
+        "first_name": "testFirstName",
+        "last_name": "testLastName",
+        "username": "test_email@example.com",
+        "password": "Test@pass01"
+    }
+    response = client.post("/v1/user/", json=user_data)
 
-#     # Send a POST request to create a new user
-#     response = client.post("/v1/user/", json=user_data)
+    assert response.status_code == 201
+    assert response.json()["first_name"] == "testFirstName"
+    assert response.json()["last_name"] == "testLastName"
+    assert response.json()["username"] == "test_email@example.com"
 
-#     # Check if the response status code is 201 Created
-#     assert response.status_code == 201
 
-#     # Check if the response contains the expected user data
-#     assert response.json()["first_name"] == "testFirstName"
-#     assert response.json()["last_name"] == "testLastName"
-#     assert response.json()["username"] == "test_email@example.com"
+# Test to handle failure in creating a user with invalid email format
+def test_create_user_failure():
+    # Define test data with invalid email address (missing '@' symbol)
+    invalid_user_data = {
+        "first_name": "testFirstName",
+        "last_name": "testLastName",
+        "username": "invalid_email_example.com",  # Invalid email format
+        "password": "Test@pass01"
+    }
 
-# # Test to handle failure in creating a user with invalid email format
-# def test_create_user_failure():
-#     # Define test data with invalid email address (missing '@' symbol)
-#     invalid_user_data = {
-#         "first_name": "testFirstName",
-#         "last_name": "testLastName",
-#         "username": "invalid_email_example.com",  # Invalid email format
-#         "password": "Test@pass01"
-#     }
+    # Send a POST request to create a new user with invalid data
+    response = client.post("/v1/user/", json=invalid_user_data)
 
-#     # Send a POST request to create a new user with invalid data
-#     response = client.post("/v1/user/", json=invalid_user_data)
+    # Check if the response status code is 400 Bad Request
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Invalid email format"
 
-#     # Check if the response status code is 400 Bad Request
-#     assert response.status_code == 400
-#     assert response.json()["detail"] == "Invalid email format"
-
-# Test to read user data successfully
+#Test to read user data successfully
 # def test_read_main():
 #     # Assuming you have the plaintext password
 #     username = "test_email@example.com"
@@ -67,20 +72,20 @@ def test_create_user():
 #     assert response.status_code == 200
 #     print(f"----response body ---- {response.json()}")
 
-# # Test to handle failure in reading user data with incorrect password
-# def test_read_main_failure():
-#     # Assuming you have the plaintext password
-#     username = "test_email@example.com"
-#     # Use an incorrect password here
-#     password = "IncorrectPassword"
-#     concatenated_value = f"{username}:{password}"
-#     payload = {}
-#     headers = {
-#         'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
-#     }
-#     response = client.get("/v1/user/self", headers=headers)
-#     # Assert that the response status code is 401 Unauthorized
-#     assert response.status_code == 401
+# Test to handle failure in reading user data with incorrect password
+def test_read_main_failure():
+    # Assuming you have the plaintext password
+    username = "test_email@example.com"
+    # Use an incorrect password here
+    password = "IncorrectPassword"
+    concatenated_value = f"{username}:{password}"
+    payload = {}
+    headers = {
+        'Authorization': f"Basic {base64.b64encode(bytes(concatenated_value, 'utf-8')).decode('utf-8')}"
+    }
+    response = client.get("/v1/user/self", headers=headers)
+    # Assert that the response status code is 401 Unauthorized
+    assert response.status_code == 401
 
 # ########################################################################################################################################################################
 
