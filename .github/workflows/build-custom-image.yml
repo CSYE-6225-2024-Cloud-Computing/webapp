@@ -1,7 +1,7 @@
 name: Build Google Custom Image Using Packer
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -70,14 +70,14 @@ jobs:
 
 
     steps:
-      # - name: Check if this push is from a PR merge
-      #   run: |
-      #     if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
-      #       echo "This push is from a pull request merge."
-      #     else
-      #       echo "This push is not from a pull request merge."
-      #       exit 1
-      #     fi
+      - name: Check if this push is from a PR merge
+        run: |
+          if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
+            echo "This push is from a pull request merge."
+          else
+            echo "This push is not from a pull request merge."
+            exit 1
+          fi
 
       - name: Checkout code
         if: success()
@@ -116,3 +116,32 @@ jobs:
             image.pkr.hcl
         
   
+      - name: Get Latest Image Name
+        id: image_name
+        run: |
+          IMAGE_NAME=$(gcloud compute images list --format="value(name)" --filter="name=centos-8-packer" --sort-by=~creationTimestamp --limit=1)
+          echo "image_name=${IMAGE_NAME}"
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+
+      - name: Create Instance Template
+        run: |
+          gcloud compute instance-templates create instance-template-v2 \
+            --machine-type=n1-standard-2 \
+            --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-east4/subnetworks/webapp1 \
+            --instance-template-region=us-east4 \
+            --service-account=${{ secrets.SERVICE_ACCOUNT }} \
+            --scopes=cloud-platform \
+            --create-disk=auto-delete=yes,boot=yes,image=${{ env.IMAGE_NAME }},size=${{ vars.DISK_SIZE }},type=${{ vars.DISK_TYPE}} \
+            --metadata=startup-script="sudo touch /home/csye6225/webapp/app/.env && sudo chown csye6225:csye6225 /home/csye6225/webapp/app/.env && sudo chmod 755 /home/csye6225/webapp/app/.env && echo 'POSTGRES_DATABASE_URL=postgresql://webapp:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:5432/webapp' >> /home/csye6225/webapp/app/.env && echo 'GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID}}' >> /home/csye6225/webapp/app/.env && sleep 5 && sudo systemctl restart webapp.service"
+
+      - name: Start Managed Instance Group Update
+        run: |
+          gcloud compute instance-groups managed rolling-action start-update appserver-igm \
+            --version=template=projects/dev-gcp-project-414615/regions/us-east4/instanceTemplates/instance-template-v2 \
+            --region=us-east4 \
+            --type=proactive
+
+      - name: Wait for Instance Group Refresh to Complete
+        id: wait-for-refresh
+        run: |
+          gcloud compute instance-groups managed wait-until appserver-igm --stable --region=us-east4 --quiet

@@ -170,6 +170,8 @@ async def verify_email(token_id: str, request: Request, db: Session = Depends(da
         error_message = f"An error occurred during email verification: {e}"
         logger.error(error_message)
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"detail": error_message})
+    
+    
 
 
 
@@ -208,5 +210,6 @@ async def verify_email(token_id: str, request: Request, db: Session = Depends(da
 #     return user
     
     
+
 
     
