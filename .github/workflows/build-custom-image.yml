@@ -1,7 +1,7 @@
 name: Build Google Custom Image Using Packer
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -70,14 +70,14 @@ jobs:
 
 
     steps:
-      # - name: Check if this push is from a PR merge
-      #   run: |
-      #     if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
-      #       echo "This push is from a pull request merge."
-      #     else
-      #       echo "This push is not from a pull request merge."
-      #       exit 1
-      #     fi
+      - name: Check if this push is from a PR merge
+        run: |
+          if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
+            echo "This push is from a pull request merge."
+          else
+            echo "This push is not from a pull request merge."
+            exit 1
+          fi
 
       - name: Checkout code
         if: success()
@@ -101,19 +101,19 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      # - name: Run Packer
-      #   run: |
-      #     cd packer-webapp
-      #     packer init image.pkr.hcl
-      #     packer build \
-      #       -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
-      #       -var="source_image_family=${{ vars.SOURCE_IMAGE_FAMILY}}" \
-      #       -var="zone=${{ vars.ZONE}}" \
-      #       -var="disk_size=${{ vars.DISK_SIZE }}" \
-      #       -var="disk_type=${{ vars.DISK_TYPE}}" \
-      #       -var="network=${{ vars.NETWORK}}" \
-      #       -var="machine_type=${{ vars.MACHINE_TYPE}}" \
-      #       image.pkr.hcl
+      - name: Run Packer
+        run: |
+          cd packer-webapp
+          packer init image.pkr.hcl
+          packer build \
+            -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
+            -var="source_image_family=${{ vars.SOURCE_IMAGE_FAMILY}}" \
+            -var="zone=${{ vars.ZONE}}" \
+            -var="disk_size=${{ vars.DISK_SIZE }}" \
+            -var="disk_type=${{ vars.DISK_TYPE}}" \
+            -var="network=${{ vars.NETWORK}}" \
+            -var="machine_type=${{ vars.MACHINE_TYPE}}" \
+            image.pkr.hcl
         
   
       - name: Get Latest Image Name
