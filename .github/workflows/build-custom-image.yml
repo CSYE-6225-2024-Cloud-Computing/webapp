@@ -129,7 +129,7 @@ jobs:
             --machine-type=n1-standard-2 \
             --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-east4/subnetworks/backend-subnet \
             --instance-template-region=us-east4 \
-            --service-account=jais-service-account@dev-gcp-project-414615.iam.gserviceaccount.com \
+            --service-account=${{ secrets.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
             --create-disk=auto-delete=yes,boot=yes,image=${{ env.IMAGE_NAME }},size=30,type=pd-ssd \
             --metadata=startup-script="sudo touch /home/csye6225/webapp/app/.env && sudo chown ${{vars.APP_USER}}:${{vars.APP_GROUP}}/home/csye6225/webapp/app/.env && sudo chmod 755 /home/csye6225/webapp/app/.env && echo 'POSTGRES_DATABASE_URL=postgresql://\$DB_USERNAME:\$DB_PASSWORD@\$DB_HOST:\$POSTGRES_PORT/\$DB_NAME' > /home/csye6225/webapp/app/.env && echo 'GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID}}' > /home/csye6225/webapp/app/.env && sleep 5 && sudo systemctl restart webapp.service"
