@@ -132,7 +132,7 @@ jobs:
             --service-account=${{ secrets.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
             --create-disk=auto-delete=yes,boot=yes,image=${{ env.IMAGE_NAME }},size=30,type=pd-balanced \
-            --metadata=startup-script="sudo touch /home/csye6225/webapp/app/.env && sudo chown csye6225:csye6225 /home/csye6225/webapp/app/.env && sudo chmod 755 /home/csye6225/webapp/app/.env && echo 'POSTGRES_DATABASE_URL=postgresql://\$DB_USERNAME:\$DB_PASSWORD@\$DB_HOST:\$POSTGRES_PORT/\$DB_NAME' > /home/csye6225/webapp/app/.env && echo 'GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID}}' > /home/csye6225/webapp/app/.env && sleep 5 && sudo systemctl restart webapp.service"
+            --metadata=startup-script="sudo touch /home/csye6225/webapp/app/.env && sudo chown csye6225:csye6225 /home/csye6225/webapp/app/.env && sudo chmod 755 /home/csye6225/webapp/app/.env && echo 'POSTGRES_DATABASE_URL=postgresql://\${{secrets.DB_USERNAME}}:\${{secrets.DB_PASSWORD}}@\$DB_HOST:\${{secrets.POSTGRES_PORT}}/\${{secrets.DB_NAME}}' > /home/csye6225/webapp/app/.env && echo 'GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID}}' > /home/csye6225/webapp/app/.env && sleep 5 && sudo systemctl restart webapp.service"
 
       - name: Start Managed Instance Group Update
         run: |
