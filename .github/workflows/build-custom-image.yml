@@ -101,19 +101,19 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-      - name: Run Packer
-        run: |
-          cd packer-webapp
-          packer init image.pkr.hcl
-          packer build \
-            -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
-            -var="source_image_family=${{ vars.SOURCE_IMAGE_FAMILY}}" \
-            -var="zone=${{ vars.ZONE}}" \
-            -var="disk_size=${{ vars.DISK_SIZE }}" \
-            -var="disk_type=${{ vars.DISK_TYPE}}" \
-            -var="network=${{ vars.NETWORK}}" \
-            -var="machine_type=${{ vars.MACHINE_TYPE}}" \
-            image.pkr.hcl
+      # - name: Run Packer
+      #   run: |
+      #     cd packer-webapp
+      #     packer init image.pkr.hcl
+      #     packer build \
+      #       -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
+      #       -var="source_image_family=${{ vars.SOURCE_IMAGE_FAMILY}}" \
+      #       -var="zone=${{ vars.ZONE}}" \
+      #       -var="disk_size=${{ vars.DISK_SIZE }}" \
+      #       -var="disk_type=${{ vars.DISK_TYPE}}" \
+      #       -var="network=${{ vars.NETWORK}}" \
+      #       -var="machine_type=${{ vars.MACHINE_TYPE}}" \
+      #       image.pkr.hcl
         
   
       - name: Get Latest Image Name
@@ -125,7 +125,7 @@ jobs:
 
       - name: Create Instance Template
         run: |
-          gcloud compute instance-templates create instance-template-v2 \
+          gcloud compute instance-templates create instance-template-v3 \
             --machine-type=n1-standard-2 \
             --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-east4/subnetworks/webapp1 \
             --instance-template-region=us-east4 \
@@ -137,7 +137,7 @@ jobs:
       - name: Start Managed Instance Group Update
         run: |
           gcloud compute instance-groups managed rolling-action start-update appserver-igm \
-            --version=template=projects/dev-gcp-project-414615/regions/us-east4/instanceTemplates/instance-template-v2 \
+            --version=template=projects/dev-gcp-project-414615/regions/us-east4/instanceTemplates/instance-template-v3 \
             --region=us-east4 \
             --type=proactive
 
