@@ -209,7 +209,3 @@ async def verify_email(token_id: str, request: Request, db: Session = Depends(da
 #     # If the update is successful, return the user details
 #     return user
     
-    
-
-
-    
