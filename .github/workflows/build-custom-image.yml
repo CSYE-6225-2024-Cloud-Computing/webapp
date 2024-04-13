@@ -127,7 +127,7 @@ jobs:
         run: |
           gcloud compute instance-templates create instance-template-v1 \
             --machine-type=n1-standard-2 \
-            --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-central1/subnetworks/webapp1 \
+            --network-interface=network=vpc-dev-1,subnet=projects/dev-gcp-project-414615/regions/us-central1/subnetworks/webapp1 \
             --instance-template-region=us-central1 \
             --service-account=${{ secrets.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
