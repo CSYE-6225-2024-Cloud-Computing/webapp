@@ -127,8 +127,8 @@ jobs:
         run: |
           gcloud compute instance-templates create instance-template-v1 \
             --machine-type=n1-standard-2 \
-            --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-east4/subnetworks/webapp1 \
-            --instance-template-region=us-east4 \
+            --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-central1/subnetworks/webapp1 \
+            --instance-template-region=us-central1 \
             --service-account=${{ secrets.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
             --create-disk=auto-delete=yes,boot=yes,image=${{ env.IMAGE_NAME }},size=${{ vars.DISK_SIZE }},type=${{ vars.DISK_TYPE}} \
@@ -137,11 +137,11 @@ jobs:
       - name: Start Managed Instance Group Update
         run: |
           gcloud compute instance-groups managed rolling-action start-update appserver-igm \
-            --version=template=projects/dev-gcp-project-414615/regions/us-east4/instanceTemplates/instance-template-v1 \
-            --region=us-east4 \
+            --version=template=projects/dev-gcp-project-414615/regions/us-central1/instanceTemplates/instance-template-v1 \
+            --region=us-central1 \
             --type=proactive
 
       - name: Wait for Instance Group Refresh to Complete
         id: wait-for-refresh
         run: |
-          gcloud compute instance-groups managed wait-until appserver-igm --stable --region=us-east4 --quiet
+          gcloud compute instance-groups managed wait-until appserver-igm --stable --region=us-central1 --quiet
