@@ -23,7 +23,7 @@ headers = {
 }
 
 router = APIRouter(
-    prefix="/v1/user",
+    prefix="/v2/user",
     tags=['authenticated']
 )
 
@@ -51,7 +51,7 @@ async def update_user_info(request: Request, user: schemas.User = Depends(verify
     logger.debug({"message": "Fields to update", "data": fields_to_update})
 
     # Check if the prefix matches
-    if not request.url.path.startswith('/v1/user/self'):
+    if not request.url.path.startswith('/v2/user/self'):
         print("not found")
         logger.error("Endpoint not found")
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": "Endpoint not found"}, headers=headers)
@@ -147,7 +147,7 @@ async def update_user_info(request: Request, user: schemas.User = Depends(verify
 # security = HTTPBasic()
 
 # router = APIRouter(
-#     prefix ="/v1/user",
+#     prefix ="/v2/user",
 #     tags=['authenticated']
 # )
 

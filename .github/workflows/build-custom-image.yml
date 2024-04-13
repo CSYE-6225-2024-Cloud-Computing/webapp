@@ -1,7 +1,7 @@
 name: Build Google Custom Image Using Packer
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -70,14 +70,14 @@ jobs:
 
 
     steps:
-      - name: Check if this push is from a PR merge
-        run: |
-          if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
-            echo "This push is from a pull request merge."
-          else
-            echo "This push is not from a pull request merge."
-            exit 1
-          fi
+      # - name: Check if this push is from a PR merge
+      #   run: |
+      #     if [[ ${{ github.event_name }} == 'push' && ${{ contains(github.event.head_commit.message, 'Merge pull request') }} ]]; then
+      #       echo "This push is from a pull request merge."
+      #     else
+      #       echo "This push is not from a pull request merge."
+      #       exit 1
+      #     fi
 
       - name: Checkout code
         if: success()
@@ -127,7 +127,7 @@ jobs:
         run: |
           gcloud compute instance-templates create instance-template-v5 \
             --machine-type=n1-standard-2 \
-            --network-interface=network=vpc-1,subnet=projects/dev-gcp-project-414615/regions/us-east4/subnetworks/webapp1 \
+            --network-interface=network=vpc-dev-1,subnet=projects/dev-gcp-project-414615/regions/us-east4/subnetworks/webapp1 \
             --instance-template-region=us-east4 \
             --service-account=${{ secrets.SERVICE_ACCOUNT }} \
             --scopes=cloud-platform \
