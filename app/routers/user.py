@@ -28,7 +28,7 @@ headers = {
 
 
 router = APIRouter(
-    prefix ="/v1/user",
+    prefix ="/v2/user",
     tags = ['user']
 )
 
@@ -47,7 +47,7 @@ async def create_user(request:Request,db: Session = Depends(database.get_db)):
 
 
         # Check if the prefix matches
-        if not request.url.path.startswith('/v1/user'):
+        if not request.url.path.startswith('/v2/user'):
             logger.warning("Endpoint not found")
             return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": "Endpoint not found"}, headers=headers)
 
